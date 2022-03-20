@@ -27,9 +27,7 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
+  p: 4,
 };
 
 function Users(props) {
@@ -51,7 +49,7 @@ function Users(props) {
     TenetList();
   },[]);
   //modal options
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = (e) => {
     setOpen(true);
     const newdata = { ...data, ...e };
@@ -173,14 +171,8 @@ function Users(props) {
                 <TableCell align="right">{tenet.status.toString()}</TableCell>
                 <TableCell align="right">
                   <Button onClick={() => handleOpen(tenet)}>Edit</Button>
-                  <Modal
-                    hideBackdrop
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="child-modal-title"
-                    aria-describedby="child-modal-description"
-                  >
-                    <Box sx={{ ...style }}>
+                  <Modal open={open} onClose={handleClose}>
+                    <Box sx={style}>
                       <form key={tenet.tenetId}>
                         <input
                           onChange={(e) => handle(e)}
