@@ -1,5 +1,5 @@
 import * as React from "react"
-import { styled, useTheme } from "@mui/material/styles"
+import { styled } from "@mui/material/styles"
 import Box from "@mui/material/Box"
 import MuiDrawer from "@mui/material/Drawer"
 import MuiAppBar from "@mui/material/AppBar"
@@ -7,16 +7,17 @@ import Toolbar from "@mui/material/Toolbar"
 import List from "@mui/material/List"
 import CssBaseline from "@mui/material/CssBaseline"
 import Typography from "@mui/material/Typography"
-import Divider from "@mui/material/Divider"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
-import InboxIcon from "@mui/icons-material/MoveToInbox"
-import MailIcon from "@mui/icons-material/Mail"
+import Avatar from "@mui/material/Avatar"
+import { makeStyles } from "@mui/styles"
+import NotificationDrawer from "../NotificationDrawer"
+import ROUTES from "../../routes/config"
+import { NavLink } from "react-router-dom"
+import { APP_NAME, APP_VERSION } from "../../utils/constants"
 
 const drawerWidth = 240
 
@@ -44,7 +45,7 @@ const closedMixin = (theme) => ({
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
@@ -53,6 +54,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+    backgroundColor: "#FFF",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
@@ -85,16 +87,33 @@ const Drawer = styled(MuiDrawer, {
     }),
 }))
 
+const useStyles = makeStyles((theme) => {
+    return {
+        userInfoContainer: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: 160,
+            backgroundColor: theme.palette.secondary.main,
+        },
+        footer: {
+            marginTop: 'auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column'
+        }
+    }
+})
+
 function Layout(props) {
-    const theme = useTheme()
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = React.useState(true)
+
+    const classes = useStyles()
 
     const handleDrawerOpen = () => {
-        setOpen(true)
-    }
-
-    const handleDrawerClose = () => {
-        setOpen(false)
+        setOpen((prev) => !prev)
     }
 
     return (
@@ -109,37 +128,55 @@ function Layout(props) {
                         edge="start"
                         sx={{
                             marginRight: 5,
-                            ...(open && { display: "none" }),
                         }}
                     >
-                        <MenuIcon />
+                        <MenuIcon color="primary" />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        ASO Exam Platform
-                    </Typography>
+                    <div style={{ marginLeft: "auto" }}>
+                        <NotificationDrawer />
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === "rtl" ? (
-                            <ChevronRightIcon />
-                        ) : (
-                            <ChevronLeftIcon />
-                        )}
-                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        color={"primary"}
+                    >
+                        ASO
+                    </Typography>
                 </DrawerHeader>
-                <Divider />
+                <div className={classes.userInfoContainer}>
+                    {open && (
+                        <>
+                            <Avatar
+                                alt="Profile Picture"
+                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2080&q=80"
+                                sx={{ width: 56, height: 56 }}
+                            />
+                            <Typography variant="body1" noWrap style={{fontWeight: 'bold'}}>
+                                Dilina Madhushan
+                            </Typography>
+                            <Typography variant="body2" noWrap>
+                                ADMIN
+                            </Typography>
+                        </>
+                    )}
+                </div>
                 <List>
-                    {["Inbox", "Starred", "Send email", "Drafts"].map(
-                        (text, index) => (
+                    {ROUTES.map(
+                        (route, index) => (
                             <ListItemButton
-                                key={text}
+                                key={'sidebarmenu' + route.id}
                                 sx={{
                                     minHeight: 48,
                                     justifyContent: open ? "initial" : "center",
                                     px: 2.5,
                                 }}
+                                component={NavLink}
+                                to={route.path}
                             >
                                 <ListItemIcon
                                     sx={{
@@ -148,20 +185,24 @@ function Layout(props) {
                                         justifyContent: "center",
                                     }}
                                 >
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
+                                    {route.icon}
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={text}
+                                    primary={route.label}
                                     sx={{ opacity: open ? 1 : 0 }}
                                 />
                             </ListItemButton>
                         )
                     )}
                 </List>
+                <footer className={classes.footer}>
+                    {open && (
+                        <>
+                            <Typography variant="body1" style={{fontSize: 12}}>{APP_NAME}</Typography>
+                            <Typography variant="body1" style={{fontSize: 10}}>{APP_VERSION}</Typography>
+                        </>
+                    )}
+                </footer>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />

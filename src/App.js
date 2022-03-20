@@ -1,19 +1,25 @@
 import { ThemeProvider } from "@mui/material/styles"
 import getTheme from "./theme"
-import Users from "./pages/Users"
 import { Routes, Route, BrowserRouter } from "react-router-dom"
 import Layout from "./components/Layout"
+import ROUTES from "./routes/config"
 
 function App() {
     return (
         <ThemeProvider theme={getTheme("light")}>
-            <Layout>
-                <BrowserRouter>
+            <BrowserRouter>
+                <Layout>
                     <Routes>
-                        <Route path="/users" element={<Users />} />
+                        {ROUTES.map((route, i) => (
+                            <Route
+                                path={route.path}
+                                element={route.element}
+                                key={"route" + route.id}
+                            />
+                        ))}
                     </Routes>
-                </BrowserRouter>
-            </Layout>
+                </Layout>
+            </BrowserRouter>
         </ThemeProvider>
     )
 }
