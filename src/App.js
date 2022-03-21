@@ -6,7 +6,7 @@ import ROUTES from "./routes/config"
 
 function App() {
     return (
-        <ThemeProvider theme={getTheme("light")}>
+        <ThemeProvider theme={getTheme("dark")}>
             <BrowserRouter>
                 <Layout>
                     <Routes>
