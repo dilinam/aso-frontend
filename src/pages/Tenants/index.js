@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Edit, PersonAdd } from "@mui/icons-material";
 
 const useStyles = makeStyles({
@@ -24,14 +24,11 @@ const useStyles = makeStyles({
     maxWidth: "100%",
     marginTop: "100px",
   },
-  link:{
-  
-  color: "#fff",
-  textDecoration: "none",
-  marginTop:"25px",
-
-  }
-
+  link: {
+    color: "#fff",
+    textDecoration: "none",
+    marginTop: "25px",
+  },
 });
 const style = {
   position: "absolute",
@@ -45,8 +42,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-function Tenants(props) {
+const Tenants = () => {
   const [tenets, setTenets] = useState([
     {
       tenetId: 5,
@@ -337,6 +333,6 @@ function Tenants(props) {
       </TableContainer>
     </div>
   );
-}
+};
 
 export default Tenants;
