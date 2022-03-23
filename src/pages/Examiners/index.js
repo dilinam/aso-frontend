@@ -9,9 +9,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { PersonAdd } from "@mui/icons-material";
 import { Paper } from "@material-ui/core";
 import UpdateList from "../../components/updateForm";
+import AddNewUser from "../../components/AddNewUser";
+
 
 const useStyles = makeStyles({
   table: {
@@ -43,7 +44,7 @@ function Examiners(props) {
     {
       examinerId: 2,
       examinerFirstName: "lakmal",
-      examinerLastName: "hasitha",
+      examinerLastName: "djhasgjd",
       examinerNIC: "991692991V",
       examinerAddress: "ahsjfdhsdaihgfoiduhgdifuhgodgfdghdf",
       examinerContactNumber: "0765804388",
@@ -99,9 +100,7 @@ function Examiners(props) {
 
   return (
     <div>
-      <a href="http://localhost:3000/" className={classes.link}>
-        <PersonAdd /> Add New Examiner
-      </a>
+        <AddNewUser isCandidate={false} />
       &nbsp; &nbsp; &nbsp;
       <TableContainer component={Paper} className={classes.tabledata}>
         <Table className={classes.table} aria-label="simple table">
@@ -119,20 +118,16 @@ function Examiners(props) {
                 <TableCell align="right">
                   {examiner.examinerFirstName}
                 </TableCell>
-                <TableCell align="right">
-                  {examiner.examinerLastName}
-                </TableCell>
+                <TableCell align="right">{examiner.examinerLastName}</TableCell>
                 <TableCell align="right">{examiner.examinerNIC}</TableCell>
-                <TableCell align="right">
-                  {examiner.examinerAddress}
-                </TableCell>
+                <TableCell align="right">{examiner.examinerAddress}</TableCell>
                 <TableCell align="right">
                   {examiner.examinerContactNumber}
                 </TableCell>
                 <TableCell align="right">{examiner.examinerEmail}</TableCell>
                 <TableCell align="right">{examiner.examinerDOB}</TableCell>
                 <TableCell align="right">
-                  <UpdateList examiner={examiner} heading={headings} /> &nbsp;
+                  <UpdateList Candidate={examiner} isCandidate={false} /> &nbsp;
                   <Button
                     variant="outlined"
                     color="error"

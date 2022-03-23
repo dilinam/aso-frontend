@@ -300,6 +300,7 @@ const Tenants = () => {
                         <Button
                           variant="outlined"
                           type="submit"
+                          sx={{ mr: 2 }}
                           onClick={(e) => submit(e)}
                         >
                           Update
@@ -308,6 +309,7 @@ const Tenants = () => {
                           // variant="outlined"
                           color="error"
                           type="submit"
+                          sx={{ ml: 2 }}
                           onClick={(e) => cancel(e)}
                         >
                           Cancel

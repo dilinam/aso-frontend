@@ -9,18 +9,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {PersonAdd } from "@mui/icons-material";
 import { Paper } from "@material-ui/core";
 import UpdateList from "../../components/updateForm";
+import AddNewUser from "../../components/AddNewUser";
 
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
     color: "#fff",
-  },
-  tabledata: {
-    overflowX : "auto",
   },
   link: {
     color: "#fff",
@@ -92,12 +89,14 @@ function Candidates(props) {
   
   return (
     <div>
-      <a href="http://localhost:3000/" className={classes.link}>
-        <PersonAdd /> Add New Candidate
-      </a>
+      <AddNewUser isCandidate={true} />
       &nbsp; &nbsp; &nbsp;
-      <TableContainer component={Paper} className={classes.tabledata}>
-        <Table className={classes.table} aria-label="simple table">
+      <TableContainer component={Paper}>
+        <Table
+          className={classes.table}
+          aria-label="simple table"
+          sx={{ height: "100vh", overflow: "auto", width: "600px" }}
+        >
           <TableHead>
             <TableRow>
               {headings.map((heading) => (
@@ -125,7 +124,8 @@ function Candidates(props) {
                 <TableCell align="right">{candidate.candidateEmail}</TableCell>
                 <TableCell align="right">{candidate.candidateDOB}</TableCell>
                 <TableCell align="right">
-                  <UpdateList candidate={candidate} heading={headings} /> &nbsp;
+                  <UpdateList Candidate={candidate} isCandidate={true} />
+                  &nbsp;
                   <Button
                     variant="outlined"
                     color="error"

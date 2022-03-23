@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
-import { Edit } from "@mui/icons-material";
+import {PersonAdd } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -28,31 +28,18 @@ const style = {
   overflowY: "scroll",
 };
 
-
-const UpdateList = (props) => {
-
+const AddNewUser = (props) => {
   const classes = useStyles();
   const [data, setData] = useState(
-    props.isCandidate
-      ? {
-          userId: props.Candidate.candidateId,
-          userFirstName: props.Candidate.candidateFirstName,
-          userLastName: props.Candidate.candidateLastName,
-          userNIC: props.Candidate.candidateNIC,
-          userAddress: props.Candidate.candidateAddress,
-          userContactNumber: props.Candidate.candidateContactNumber,
-          userEmail: props.Candidate.candidateEmail,
-          userDOB: props.Candidate.candidateDOB,
-        }
-      : {
-          userId: props.Candidate.examinerId,
-          userFirstName: props.Candidate.examinerFirstName,
-          userLastName: props.Candidate.examinerLastName,
-          userNIC: props.Candidate.examinerNIC,
-          userAddress: props.Candidate.examinerAddress,
-          userContactNumber: props.Candidate.examinerContactNumber,
-          userEmail: props.Candidate.examinerEmail,
-          userDOB: props.Candidate.examinerDOB,
+ {
+          userId: "",
+          userFirstName: "",
+          userLastName: "",
+          userNIC: "",
+          userAddress: "",
+          userContactNumber: "",
+          userEmail: "",
+          userDOB: "",
         }
   );
   const [formErrors, setFormErrors] = useState({});
@@ -63,8 +50,7 @@ const UpdateList = (props) => {
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit && isCandidate) {
       axios
-        .put("http://localhost:8080/updateCandidate/submit", {
-          candidateId: data.userId,
+        .post("http://localhost:8080/Candidate/submit", {
           candidateFirstName: data.userFirstName,
           candidateLastName: data.userLastName,
           candidateNIC: data.userNIC,
@@ -84,10 +70,9 @@ const UpdateList = (props) => {
           }
         );
     }
-    if (Object.keys(formErrors).length === 0 && isSubmit && !(isCandidate)) {
+    if (Object.keys(formErrors).length === 0 && isSubmit && !isCandidate) {
       axios
-        .put("http://localhost:8080/updateExaminer/submit", {
-          examinerId: data.userId,
+        .post("http://localhost:8080/Examiner/submit", {
           examinerFirstName: data.userFirstName,
           examinerLastName: data.userLastName,
           examinerNIC: data.userNIC,
@@ -147,23 +132,23 @@ const UpdateList = (props) => {
   };
   //modal options
   const [open, setOpen] = React.useState(false);
-  const handleOpen = (e) => {
+  const handleOpen = () => {
     setOpen(true);
-    const newdata = { ...data, ...e };
-    setData(newdata);
-    console.log(newdata);
   };
   const handleClose = (e) => {
     setOpen(false);
   };
-   const cancel = (e) => {
-     e.preventDefault();
-     setOpen(false);
-   };
+  const cancel = (e) => {
+    e.preventDefault();
+    setOpen(false);
+  };
   return (
     <div>
-      <Button onClick={() => handleOpen(props.candidate)} endIcon={<Edit />}>
-        Edit
+      <Button
+        onClick={() => handleOpen()}
+        startIcon={<PersonAdd />}
+      >
+        Add New User
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
         <Box sx={style}>
@@ -174,7 +159,7 @@ const UpdateList = (props) => {
                 maxWidth: "100%",
               }}
             >
-                <h1>update user details</h1>
+              <h1>Add New User</h1>
               <TextField
                 className={classes.inputfield}
                 fullWidth
@@ -183,7 +168,6 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="FirstName"
                 id="userFirstName"
-                value={data.userFirstName}
                 type="text"
                 helperText={formErrors.userFirstName}
               />
@@ -196,7 +180,6 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="Last Name"
                 id="userLastName"
-                value={data.userLastName}
                 type="text"
                 helperText={formErrors.userLastName}
               />
@@ -209,7 +192,6 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="user NIC"
                 id="userNIC"
-                value={data.userNIC}
                 type="text"
                 helperText={formErrors.userNIC}
               />
@@ -219,7 +201,6 @@ const UpdateList = (props) => {
                 label="Address"
                 onChange={(e) => handle(e)}
                 id="userAddress"
-                value={data.userAddress}
                 placeholder="Address"
                 type="text"
                 multiline
@@ -235,7 +216,6 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="Contact Number"
                 id="userContactNumber"
-                value={data.userContactNumber}
                 type="text"
                 helperText={formErrors.userContactNumber}
               />
@@ -248,7 +228,6 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="Email"
                 id="userEmail"
-                value={data.userEmail}
                 type="text"
                 helperText={formErrors.userEmail}
               />
@@ -261,13 +240,12 @@ const UpdateList = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="yyyy/mm/dd"
                 id="userDOB"
-                value={data.userDOB}
                 type="text"
                 helperText={formErrors.userDOB}
               />
             </Box>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
-              Update
+              Register
             </Button>
             <Button
               // variant="outlined"
@@ -284,4 +262,4 @@ const UpdateList = (props) => {
   );
 };
 
-export default UpdateList;
+export default AddNewUser;
