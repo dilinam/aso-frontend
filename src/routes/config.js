@@ -4,6 +4,7 @@ import Tenants from "../pages/Tenants";
 import Courses from '../pages/Courses'
 import Candidates from '../pages/Candidates';
 import Examiners from '../pages/Examiners';
+import QuizPage from '../pages/QuizPage';
 
 const ROUTES = [
   {
@@ -39,6 +40,13 @@ const ROUTES = [
     label: "Examiners",
     path: "/examiners",
     element: <Examiners />,
+    icon: <SafetyDivider />,
+  },
+  {
+    id: 6,
+    label: "QuizPage",
+    path: "/quizPage",
+    element: <QuizPage />,
     icon: <SafetyDivider />,
   },
 ];
