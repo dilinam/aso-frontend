@@ -13,7 +13,8 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Edit, PersonAdd } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
+import AddNewTenant from "../../components/AddNewTenant";
 
 const useStyles = makeStyles({
   table: {
@@ -185,9 +186,7 @@ const Tenants = () => {
   };
   return (
     <div>
-      <a href="http://localhost:3000/" className={classes.link}>
-        <PersonAdd /> Add New Tenet
-      </a>
+      <AddNewTenant/>
       &nbsp; &nbsp; &nbsp;
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">

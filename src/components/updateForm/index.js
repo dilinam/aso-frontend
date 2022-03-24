@@ -19,7 +19,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
   bgcolor: "rgba(58, 56, 69,0.6)",
   border: "2px solid #000",
   borderRadius: "10px",
@@ -174,7 +174,7 @@ const UpdateList = (props) => {
                 maxWidth: "100%",
               }}
             >
-                <h1>update user details</h1>
+              <h1>update user details</h1>
               <TextField
                 className={classes.inputfield}
                 fullWidth
@@ -249,7 +249,7 @@ const UpdateList = (props) => {
                 placeholder="Email"
                 id="userEmail"
                 value={data.userEmail}
-                type="text"
+                type="email"
                 helperText={formErrors.userEmail}
               />
               &nbsp;
@@ -266,9 +266,11 @@ const UpdateList = (props) => {
                 helperText={formErrors.userDOB}
               />
             </Box>
+            <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
               Update
             </Button>
+            &nbsp; &nbsp;
             <Button
               // variant="outlined"
               color="error"

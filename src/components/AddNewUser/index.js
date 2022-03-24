@@ -19,7 +19,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
   bgcolor: "rgba(58, 56, 69,0.6)",
   border: "2px solid #000",
   borderRadius: "10px",
@@ -144,10 +144,7 @@ const AddNewUser = (props) => {
   };
   return (
     <div>
-      <Button
-        onClick={() => handleOpen()}
-        startIcon={<PersonAdd />}
-      >
+      <Button onClick={() => handleOpen()} startIcon={<PersonAdd />}>
         Add New User
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
@@ -195,7 +192,7 @@ const AddNewUser = (props) => {
                 type="text"
                 helperText={formErrors.userNIC}
               />
-              &nbsp;
+              &nbsp; &nbsp;
               <TextField
                 className={classes.inputfield}
                 label="Address"
@@ -207,7 +204,7 @@ const AddNewUser = (props) => {
                 error={formErrors.userAddress == null ? false : true}
                 maxRows={4}
               />
-              &nbsp;
+              &nbsp; &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
@@ -228,7 +225,7 @@ const AddNewUser = (props) => {
                 onChange={(e) => handle(e)}
                 placeholder="Email"
                 id="userEmail"
-                type="text"
+                type="email"
                 helperText={formErrors.userEmail}
               />
               &nbsp;
@@ -243,6 +240,7 @@ const AddNewUser = (props) => {
                 type="text"
                 helperText={formErrors.userDOB}
               />
+              &nbsp;
             </Box>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
               Register
