@@ -2,10 +2,11 @@ import * as React from "react";
 import QuizBox from "../../components/QuizBox";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import CountdownTimer from "../../components/CountdownTimer";
+import CourseSection from "../CourseSection";
+import CountdownTimer from '../../components/CountdownTimer'
 
 const QuizPage = () => {
-  const questions = [
+  const [questions, setQuestions] = React.useState([
     {
       quizNumber: 1,
       question:
@@ -30,21 +31,31 @@ const QuizPage = () => {
         "Write java code to print 1-100 odd numbers using recusive function",
       answers: ["fgfdgdfg", "dfsadfas", "dfsdfs", "dfdfdsaf"],
     },
-  ];
+  ]);
+
   return (
-    <Box sx={{ width: "75%", margin: "auto" }}>
-      <Stack spacing={1} justifyContent="center">
-        <CountdownTimer/>
-        {questions.map((q) => {
-          return (
-            <Box>
-              {" "}
-              <QuizBox {...q} />
-            </Box>
-          );
-        })}
-      </Stack>
-    </Box>
+    <>
+          <CountdownTimer/>
+      <CourseSection
+        addNewQuiz={(newQuiz) =>
+          setQuestions((prev) => {
+            let updateQuiz = [...prev, newQuiz];
+            return updateQuiz;
+          })
+        }
+      />
+      <Box sx={{ width: "75%", margin: "auto" }}>
+        <Stack spacing={2} justifyContent="center">
+          {questions.map((q) => {
+            return (
+              <Box>
+                <QuizBox {...q} />
+              </Box>
+            );
+          })}
+        </Stack>
+      </Box>
+    </>
   );
 };
 
