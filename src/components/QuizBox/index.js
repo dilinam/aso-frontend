@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -12,19 +11,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 
-// question box component a quetion and answers show here
 const QuizBox = ({ quizNumber, question, answers }) => {
   const [decision, setDecision] = React.useState("check");
   const [editQuiz, setEditQuiz] = React.useState(question);
   const [newQuiz, setNewQuiz] = React.useState(question);
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => setOpen(true); //modal open and close actions handle
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const quizChange = (e) => {
@@ -38,7 +35,6 @@ const QuizBox = ({ quizNumber, question, answers }) => {
   };
 
   const style = {
-    // styles for main box in modal
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -54,7 +50,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
   const Checkboxes = () => {
     return (
       <FormGroup>
-        {answers.map((answer, value) => {
+        {answers.map((answer, value = 1) => {
           value = value + 1;
           return (
             <FormControlLabel
@@ -91,7 +87,6 @@ const QuizBox = ({ quizNumber, question, answers }) => {
   };
 
   const handleChange = () => {
-    // handle question have single answer or multiple answer type question
     if (decision === "check") {
       console.log("radio");
       setDecision("radio");
@@ -138,7 +133,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
       </Typography>
       {decision === "radio" ? <RadioButtonsGroup /> : <Checkboxes />}
 
-      <Modal // Modal start from here
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -146,7 +141,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
       >
         <Box sx={style}>
           <form noValidate autoComplete="off">
-            <TextField // quiz number textfield
+            <TextField
               sx={{ m: 1 }}
               fullWidth
               label={"Question " + quizNumber}
@@ -158,7 +153,6 @@ const QuizBox = ({ quizNumber, question, answers }) => {
               value={editQuiz}
             />
             {answers.map((answer) => {
-              // answers text field | map fields to display each answers seperatly
               return (
                 <TextField
                   sx={{ m: 1 }}
@@ -174,18 +168,22 @@ const QuizBox = ({ quizNumber, question, answers }) => {
             })}
           </form>
           <br></br>
-          Multiple Answers -
-          <ToggleButtonGroup // Single or multiple answer type choose topgle button
+          <ToggleButtonGroup
             color="success"
             size="small"
             value={decision}
             exclusive
             onChange={handleChange}
           >
-            <ToggleButton value="radio">NO</ToggleButton>
-            <ToggleButton value="check">YES</ToggleButton>
+            <ToggleButton value="radio">
+              <RadioButtonCheckedIcon fontSize="small" />
+            </ToggleButton>
+            <ToggleButton value="check">
+              <CheckBoxIcon fontSize="small" />
+            </ToggleButton>
           </ToggleButtonGroup>
-          <Button //  question and answers reset button
+
+          <Button
             sx={{ m: 2 }}
             onClick={() => {
               setEditQuiz(question);
@@ -194,9 +192,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
             Reset
           </Button>
           <Button variant="contained" color="success" onClick={newQuizSet}>
-            {" "}
-            // Question and answers Change set button (modal alto close from
-            this) Ok
+            Ok
           </Button>
         </Box>
       </Modal>
