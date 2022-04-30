@@ -18,6 +18,7 @@ const Course = ({courseId, courseCode, courseName, image}) => {
     return(
       <Card sx={{ minWidth: 275 }}>
          <CardMedia
+         elevation = {1}
         component="img"
         height="140"
         image= {image}
@@ -31,7 +32,7 @@ const Course = ({courseId, courseCode, courseName, image}) => {
           {courseName}
         </Typography>
       </CardContent>
-      <Grid container direction="row" alignItems="center" spacing={30}>
+      <Grid container direction="row" alignItems="center" spacing={15}>
       <Grid item>
       <CardActions style={{margin:'0'}} >
         <Button size="small"  varient='text' >Goto Course</Button>
