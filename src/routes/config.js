@@ -8,6 +8,7 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import SecondQuizBox from "../components/SecondQuizBox";
 import AddCourse from "../components/AddCourse";
 import TenantLogin from "../pages/TenantLogin";
+import Login from "../pages/Login";
 
 const ROUTES = [
   {
@@ -61,6 +62,14 @@ const ROUTES = [
     element: <TenantLogin />,
     icon: <QuizIcon />,
   },
+  {
+    id: 8,
+    label: "Login",
+    path: "/login",
+    element: <Login />,
+    icon: <Dashboard />,
+    hideLayout: true
+  }
 ];
 
 export default ROUTES;

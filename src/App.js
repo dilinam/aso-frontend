@@ -8,17 +8,15 @@ function App() {
     return (
         <ThemeProvider theme={getTheme("dark")}>
             <BrowserRouter>
-                <Layout>
-                    <Routes>
-                        {ROUTES.map((route, i) => (
-                            <Route
-                                path={route.path}
-                                element={route.element}
-                                key={"route" + route.id}
-                            />
-                        ))}
-                    </Routes>
-                </Layout>
+                <Routes>
+                    {ROUTES.map((route, i) => (
+                        <Route
+                            path={route.path}
+                            element={<Layout isLayoutHide={route.hideLayout}>{route.element}</Layout>}
+                            key={"route" + route.id}
+                        />
+                    ))}
+                </Routes>
             </BrowserRouter>
         </ThemeProvider>
     )
