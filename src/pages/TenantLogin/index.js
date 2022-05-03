@@ -1,11 +1,11 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import Tenant from "../../components/Tenant";
-import Divider from "@mui/material/Divider";
+// import Box from "@mui/material/Box";
+// import Stack from "@mui/material/Stack";
+// import Button from "@mui/material/Button";
+// import Typography from "@mui/material/Typography";
+// import Modal from "@mui/material/Modal";
+// import Tenant from "../../components/Tenant";
+// import Divider from "@mui/material/Divider";
 
 const tenantList = ["tenantOne", "tenantTwo", "tenantThree"];
 
@@ -29,7 +29,7 @@ const TenantLogin = () => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      {/* <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -55,7 +55,7 @@ const TenantLogin = () => {
             </Stack>
           </Box>
         </Box>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

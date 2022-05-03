@@ -16,6 +16,7 @@ import axios from "axios"
 import { BASE_URL } from "../../utils/constants"
 import { Alert } from "@mui/material"
 import TenantListModal from "../../components/TenantListModal"
+import { useNavigate } from "react-router-dom"
 
 function Copyright(props) {
     return (
@@ -41,7 +42,16 @@ export default function Login() {
     const [error, setError] = React.useState(false)
     const [accessToken, setAccessToken] = React.useState(null)
     const [tenants, setTenants] = React.useState([])
+    const [selectedTenant, setSelectedTenant] = React.useState(null)
     const [tenantModalOpen, setTenantModalOpen] = React.useState(false)
+
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if(localStorage.getItem('JWT')){
+            navigate('/')
+        }
+    }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -75,7 +85,24 @@ export default function Login() {
         }
     }
 
-    React.useEffect(getTenants, [accessToken])
+    const handleSetTenant = () => {
+        if(selectedTenant){
+            axios
+                .post(`${BASE_URL}/api/auth/setTenant`, {jwt: accessToken, tenant: selectedTenant})
+                .then((response) => {
+                    if (response?.data?.accessToken) {
+                        localStorage.setItem("JWT", response.data.accessToken);
+                        navigate('/');
+                    }
+                })
+                .catch((error) => {
+                    setError(true)
+                })
+        }
+    }
+
+    React.useEffect(getTenants, [accessToken]);
+    React.useEffect(handleSetTenant, [selectedTenant]);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -152,7 +179,7 @@ export default function Login() {
                 </Box>
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
-            <TenantListModal open={tenantModalOpen} setOpen={setTenantModalOpen} tenantList={tenants} />
+            <TenantListModal open={tenantModalOpen} setOpen={setTenantModalOpen} tenantList={tenants} setSelectedTenant={setSelectedTenant} />
         </Container>
     )
 }

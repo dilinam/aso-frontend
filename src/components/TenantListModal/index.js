@@ -1,6 +1,6 @@
 import { Divider, Modal, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import Tenant from "../Tenant";
+import TenantTile from "../TenantTile";
 
 const style = {
     position: "absolute",
@@ -15,7 +15,7 @@ const style = {
     borderRadius: 3,
   };
 
-function TenantListModal({open, setOpen, tenantList}){
+function TenantListModal({open, setOpen, tenantList, setSelectedTenant}){
 
   const handleClose = () => {
     setOpen(false);
@@ -42,7 +42,7 @@ function TenantListModal({open, setOpen, tenantList}){
           <Box sx={{ width: "95%", margin: "auto" }}>
             <Stack spacing={2} justifyContent={"center"}>
               {tenantList.map((tenant) => {
-                return <Tenant tenantName={tenant.tenantName} />;
+                return <TenantTile tenantName={tenant.tenantName} key={'tenantTile' + tenant.tenantId} id={tenant.tenantId} setSelectedTenant={setSelectedTenant} />;
               })}
             </Stack>
           </Box>
