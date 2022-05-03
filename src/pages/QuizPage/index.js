@@ -3,7 +3,7 @@ import QuizBox from "../../components/QuizBox";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import CourseSection from "../CourseSection";
-import CountdownTimer from '../../components/CountdownTimer'
+import CountdownTimer from "../../components/CountdownTimer";
 
 const QuizPage = () => {
   const [questions, setQuestions] = React.useState([
@@ -35,7 +35,7 @@ const QuizPage = () => {
 
   return (
     <>
-          <CountdownTimer/>
+      <CountdownTimer />
       <CourseSection
         addNewQuiz={(newQuiz) =>
           setQuestions((prev) => {
