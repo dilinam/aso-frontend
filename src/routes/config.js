@@ -9,6 +9,7 @@ import SecondQuizBox from "../components/SecondQuizBox";
 import AddCourse from "../components/AddCourse";
 import TenantLogin from "../pages/TenantLogin";
 import Login from "../pages/Login";
+import Exams from "../pages/Exams";
 
 const ROUTES = [
   {
@@ -69,6 +70,13 @@ const ROUTES = [
     element: <Login />,
     icon: <Dashboard />,
     hideLayout: true
+  },
+  {
+    id: 8,
+    label: "Exams",
+    path: "/exams",
+    element: <Exams/>,
+    icon: <QuizIcon/>,
   }
 ];
 
