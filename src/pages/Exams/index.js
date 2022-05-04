@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import AddNewExam from "../../components/AddNewExam";
 import UpdateExam from "../../components/UpdateExam";
+import axios from "axios";
 const Exams = () => {
   const [examData, setExamData] = useState([
     {
@@ -38,6 +39,12 @@ const Exams = () => {
       deleted: false,
     },
   ]);
+  useEffect(()=>{
+    axios.get("http://localhost:8080/api/exam").then((response) => {
+      console.log(response.data);
+      setExamData(response.data);
+    });
+  },[]);
   return (
     <Grid container spacing={5}>
       <Grid item xs={12}>

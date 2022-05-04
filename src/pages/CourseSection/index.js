@@ -25,7 +25,10 @@ const CourseSection = (props) => {
     question: "",
     answers: ["", "", "", ""],
   });
-  console.log(quiz.question);
+  // console.log(quiz.question);
+  React.useEffect(()=>{
+    
+  },[quiz])
 
   const questionTypeHandler = (event) => {
     // handle what type of question box should create (mcq, essay, stuctured)
@@ -64,11 +67,13 @@ const CourseSection = (props) => {
   //   display: "none",
   // });
 
+  
+
   return (
     <>
       {/* button for add new question */}
       <Button variant="outlined" onClick={handleOpen}>
-        New Question
+        Add Question
       </Button>
       <Modal // modal start here
         open={open}
@@ -174,7 +179,7 @@ const CourseSection = (props) => {
 
           {selectedValue === "mcq" ? ( // check the question type and chnage the layout of each question display to the end user
             quiz.answers.map((item, index) => {
-              index = index + 1;
+              index = index +1;
               return (
                 <Box sx={{ display: "flex" }}>
                   {decision === "check" ? (
@@ -202,11 +207,11 @@ const CourseSection = (props) => {
                     onChange={(e) => {
                       setQuiz((prev) => {
                         let temp = { ...prev };
-                        temp.answers[index] = e.target.value;
+                        temp.answers[index-1] = e.target.value;
                         return temp;
                       });
                     }}
-                    label={"Answer " + (index + 1)}
+                    label={"Answer " + (index )}
                     sx={{ alignContent: "center", p: 1 }}
                   />
                 </Box>
@@ -308,7 +313,7 @@ const CourseSection = (props) => {
               sx={{ alignContent: "right" }}
               onClick={() => props.addNewQuiz({ ...quiz })}
             >
-              Send
+              Save
             </Button>
           </Box>
         </Box>

@@ -10,6 +10,7 @@ import AddCourse from "../components/AddCourse";
 import TenantLogin from "../pages/TenantLogin";
 import Login from "../pages/Login";
 import Exams from "../pages/Exams";
+import Tenants from "../pages/Tenants";
 
 const ROUTES = [
   {
@@ -69,15 +70,22 @@ const ROUTES = [
     path: "/login",
     element: <Login />,
     icon: <Dashboard />,
-    hideLayout: true
+    hideLayout: true,
   },
   {
-    id: 8,
+    id: 9,
     label: "Exams",
     path: "/exams",
-    element: <Exams/>,
-    icon: <QuizIcon/>,
-  }
+    element: <Exams />,
+    icon: <QuizIcon />,
+  },
+  {
+    id: 10,
+    label: "Tenants",
+    path: "/tenants",
+    element: <Tenants />,
+    icon: <QuizIcon />,
+  },
 ];
 
 export default ROUTES;

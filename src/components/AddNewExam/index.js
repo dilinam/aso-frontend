@@ -10,6 +10,7 @@ import { AddCircleOutlined } from "@mui/icons-material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
+import CourseSection from "../../pages/CourseSection";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -41,6 +42,7 @@ const AddNewExam = () => {
   const [open, setOpen] = React.useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [questions, setQuestions] = React.useState([]);
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       axios
@@ -107,6 +109,9 @@ const AddNewExam = () => {
   const handleChange = (newValue) => {
     console.log(newValue);
   };
+  React.useEffect(() => {
+    console.log(questions)
+  }, [questions]);
   return (
     <div>
       <Grid item alignItems="center" onClick={() => handleOpen()}>
@@ -188,13 +193,24 @@ const AddNewExam = () => {
                 helperText={formErrors.duration}
               />
             </Box>
+            <br></br>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
-                label="Date&Time picker"
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <br></br>
+            <br></br>
+            <CourseSection
+              addNewQuiz={(newQuiz) =>
+                setQuestions((prev) => {
+                  let updateQuiz = [...prev, newQuiz];
+                  return updateQuiz;
+                })
+              
+              }
+            />
             <br></br>
             <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
