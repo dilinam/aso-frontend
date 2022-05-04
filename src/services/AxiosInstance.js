@@ -1,19 +1,16 @@
-import axios from 'axios';
-import { BASE_URL } from '../Utils/Constants';
-import { getTokens } from './AuthService';
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
-const TOKEN = localStorage.getItem('JWT');
+
+const TOKEN = localStorage.getItem("JWT");
 
 const AXIOS_INSTANCE = axios.create({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
 });
 
 const requestHandler = (request) => {
-
   if (TOKEN && !request.headers.Authorization) {
-    request.headers.Authorization = TOKEN
-      ? 'Bearer ' + TOKEN
-      : null;
+    request.headers.Authorization = TOKEN ? "Bearer " + TOKEN : null;
   }
 
   return request;
@@ -24,9 +21,8 @@ const responseHandler = (response) => {
 };
 
 const errorHandler = async (error) => {
-
-  if(error?.response?.status == 403){
-    localStorage.removeItem('JWT')
+  if (error?.response?.status == 403) {
+    localStorage.removeItem("JWT");
   }
   return Promise.reject(error);
 };

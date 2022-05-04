@@ -16,7 +16,7 @@ import Avatar from "@mui/material/Avatar"
 import { makeStyles } from "@mui/styles"
 import NotificationDrawer from "../NotificationDrawer"
 import ROUTES from "../../routes/config"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { APP_NAME, APP_VERSION } from "../../utils/constants"
 
 const drawerWidth = 240
@@ -109,6 +109,14 @@ const useStyles = makeStyles((theme) => {
 
 function Layout(props) {
     const [open, setOpen] = React.useState(true)
+
+    const navigate = useNavigate();
+    
+    React.useEffect(() => {
+        if(!localStorage.getItem('JWT')){
+            navigate('/login')
+        }
+    }, [])
 
     const classes = useStyles()
 

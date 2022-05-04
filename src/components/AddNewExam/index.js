@@ -11,6 +11,8 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import CourseSection from "../../pages/CourseSection";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -35,8 +37,6 @@ const AddNewExam = () => {
   const errors = {};
   const classes = useStyles();
   const [data, setData] = useState({
-    name: "",
-    description: "",
     dateTime: "",
   });
   const [open, setOpen] = React.useState(false);
@@ -45,22 +45,21 @@ const AddNewExam = () => {
   const [questions, setQuestions] = React.useState([]);
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      axios
-        .post("http://localhost:8080/exams/submit", {
-          name: data.name,
-          description: data.description,
-          tenetAdminPassword: data.dateTime,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+      AXIOS_INSTANCE.post(BASE_URL + "/api/exam", {
+        questions: questions,
+        exam : data
+      }).then(
+        (response) => {
+          console.log(response);
+          setOpen(false);
+          setIsSubmit(false);
+        },
+        (error) => {
+          console.log(error);
+          setOpen(false);
+          setIsSubmit(false);
+        }
+      );
     }
   });
   const handle = (e) => {
@@ -83,14 +82,15 @@ const AddNewExam = () => {
 
   },[open])
   const validateInfo = (values) => {
-    if (!values.name.trim()) {
+    console.log(values)
+    if (false) {
       errors.name = "name required.";
     }
-    if (!values.description.trim()) {
+    if (false) {
       errors.description = "Description required.";
     }
-    if (!values.dateTime.trim()) {
-      errors.dateTime = "date time required.";
+    if (false) {
+      errors.description = "DateTime required.";
     }
     return errors;
   };
@@ -107,7 +107,10 @@ const AddNewExam = () => {
     setOpen(false);
   };
   const handleChange = (newValue) => {
-    console.log(newValue);
+    const newdata = { ...data };
+    newdata.dateTime = String(newValue);
+    setData(newdata);
+    console.log(data);
   };
   React.useEffect(() => {
     console.log(questions)
@@ -151,7 +154,7 @@ const AddNewExam = () => {
                 error={formErrors.name == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Name"
-                id="name"
+                id="examName"
                 type="text"
                 helperText={formErrors.name}
               />
@@ -160,25 +163,13 @@ const AddNewExam = () => {
                 className={classes.inputfield}
                 label="Description"
                 onChange={(e) => handle(e)}
-                id="description"
+                id="examDescription"
                 placeholder="Description"
                 type="text"
                 multiline
                 error={formErrors.description == null ? false : true}
                 maxRows={4}
                 helperText={formErrors.description}
-              />
-              &nbsp;
-              <TextField
-                className={classes.inputfield}
-                fullWidth
-                label="date Time"
-                error={formErrors.dateTime == null ? false : true}
-                onChange={(e) => handle(e)}
-                placeholder="date Time"
-                id="dateTime"
-                type="text"
-                helperText={formErrors.dateTime}
               />
               &nbsp;
               <TextField
@@ -208,7 +199,6 @@ const AddNewExam = () => {
                   let updateQuiz = [...prev, newQuiz];
                   return updateQuiz;
                 })
-              
               }
             />
             <br></br>

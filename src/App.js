@@ -3,12 +3,14 @@ import getTheme from "./theme"
 import { Routes, Route, BrowserRouter } from "react-router-dom"
 import Layout from "./components/Layout"
 import ROUTES from "./routes/config"
+import Login from "./pages/Login"
 
 function App() {
     return (
         <ThemeProvider theme={getTheme("dark")}>
             <BrowserRouter>
                 <Routes>
+                    <Route path={'/login'} element={<Login />} />
                     {ROUTES.map((route, i) => (
                         <Route
                             path={route.path}

@@ -65,14 +65,6 @@ const ROUTES = [
     icon: <QuizIcon />,
   },
   {
-    id: 8,
-    label: "Login",
-    path: "/login",
-    element: <Login />,
-    icon: <Dashboard />,
-    hideLayout: true,
-  },
-  {
     id: 9,
     label: "Exams",
     path: "/exams",

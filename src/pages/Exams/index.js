@@ -5,7 +5,8 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import AddNewExam from "../../components/AddNewExam";
 import UpdateExam from "../../components/UpdateExam";
-import axios from "axios";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
 const Exams = () => {
   const [examData, setExamData] = useState([
     {
@@ -40,7 +41,7 @@ const Exams = () => {
     },
   ]);
   useEffect(()=>{
-    axios.get("http://localhost:8080/api/exam").then((response) => {
+    AXIOS_INSTANCE.get(BASE_URL+"/api/exam").then((response) => {
       console.log(response.data);
       setExamData(response.data);
     });
@@ -80,7 +81,7 @@ const Exams = () => {
               </Paper>
             </Grid>
           ))}
-          <AddNewExam />
+          <AddNewExam/>
         </Grid>
       </Grid>
     </Grid>
