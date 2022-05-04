@@ -3,9 +3,13 @@ import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import Modal from "@mui/material/Modal";
 import { Settings } from "@mui/icons-material";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
+import { DateTimePicker, LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import CourseSection from "../../pages/CourseSection";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -29,27 +33,32 @@ const style = {
 };
 
 const UpdateExam = () => {
+     const errors = {};
      const classes = useStyles();
-     const [data, setData] = useState({});
+     const [data, setData] = useState({
+       dateTime: "",
+     });
+     const [open, setOpen] = React.useState(false);
      const [formErrors, setFormErrors] = useState({});
      const [isSubmit, setIsSubmit] = useState(false);
-     const errors = {};
-     // form handel
+     const [questions, setQuestions] = React.useState([]);
      useEffect(() => {
        if (Object.keys(formErrors).length === 0 && isSubmit) {
-         axios
-           .put("http://localhost:8080/updateCandidate/submit", {})
-           .then(
-             (response) => {
-               console.log(response);
-               setOpen(false);
-               setIsSubmit(false);
-             },
-             (error) => {
-               console.log(error);
-             }
-           );
-       } 
+         AXIOS_INSTANCE.put(BASE_URL + "/api/exam", {
+           exam: data,
+         }).then(
+           (response) => {
+             console.log(response);
+             setOpen(false);
+             setIsSubmit(false);
+           },
+           (error) => {
+             console.log(error);
+             setOpen(false);
+             setIsSubmit(false);
+           }
+         );
+       }
      });
      const handle = (e) => {
        const newdata = { ...data };
@@ -66,34 +75,26 @@ const UpdateExam = () => {
        }
        console.log(open);
      };
+     useEffect(() => {
+       setFormErrors({});
+     }, [open]);
      const validateInfo = (values) => {
-       if (!values.userFirstName.trim()) {
-         errors.userFirstName = " First Name required.";
+       console.log(values);
+       if (false) {
+         errors.name = "name required.";
        }
-       if (!values.userLastName.trim()) {
-         errors.userLastName = " Last Name required.";
+       if (false) {
+         errors.description = "Description required.";
        }
-       if (!values.userNIC.trim()) {
-         errors.userNIC = " NIC required.";
-       }
-       if (!values.userAddress.trim()) {
-         errors.userAddress = " Address required.";
-       }
-       if (!values.userContactNumber.trim()) {
-         errors.userContactNumber = " Contact Number required.";
-       }
-       if (!values.userDOB.trim()) {
-         errors.userDOB = " DOB required.";
+       if (false) {
+         errors.description = "DateTime required.";
        }
        return errors;
      };
      //modal options
-     const [open, setOpen] = React.useState(false);
-     const handleOpen = (e) => {
+
+     const handleOpen = () => {
        setOpen(true);
-       const newdata = { ...data, ...e };
-       setData(newdata);
-       console.log(newdata);
      };
      const handleClose = (e) => {
        setOpen(false);
@@ -102,121 +103,89 @@ const UpdateExam = () => {
        e.preventDefault();
        setOpen(false);
      };
+     const handleChange = (newValue) => {
+       const newdata = { ...data };
+       newdata.dateTime = String(newValue);
+       setData(newdata);
+       console.log(data);
+     };
+     React.useEffect(() => {
+       console.log(questions);
+     }, [questions]);
   return (
     <div>
-      <Button
-        onClick={() => handleOpen()}
-        endIcon={<Settings />}
-        color="error"
-      >
+      <Button onClick={() => handleOpen()} endIcon={<Settings />} color="error">
         change options
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
         <Box sx={style}>
-          <form key={data.userId}>
+          <form>
             <Box
               sx={{
                 width: 500,
                 maxWidth: "100%",
               }}
             >
-              <h1>update user details</h1>
+              <h1>Add New Exam</h1>
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="FirstName"
-                error={formErrors.userFirstName == null ? false : true}
+                label="Name"
+                error={formErrors.name == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="FirstName"
-                id="userFirstName"
-                value={data.userFirstName}
+                placeholder="Name"
+                id="examName"
                 type="text"
-                helperText={formErrors.userFirstName}
+                helperText={formErrors.name}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
-                fullWidth
-                label="Last Name"
-                error={formErrors.userLastName == null ? false : true}
+                label="Description"
                 onChange={(e) => handle(e)}
-                placeholder="Last Name"
-                id="userLastName"
-                value={data.userLastName}
-                type="text"
-                helperText={formErrors.userLastName}
-              />
-              &nbsp;
-              <TextField
-                className={classes.inputfield}
-                fullWidth
-                label="user NIC"
-                error={formErrors.userNIC == null ? false : true}
-                onChange={(e) => handle(e)}
-                placeholder="user NIC"
-                id="userNIC"
-                value={data.userNIC}
-                type="text"
-                helperText={formErrors.userNIC}
-              />
-              &nbsp;
-              <TextField
-                className={classes.inputfield}
-                label="Address"
-                onChange={(e) => handle(e)}
-                id="userAddress"
-                value={data.userAddress}
-                placeholder="Address"
+                id="examDescription"
+                placeholder="Description"
                 type="text"
                 multiline
-                error={formErrors.userAddress == null ? false : true}
+                error={formErrors.description == null ? false : true}
                 maxRows={4}
+                helperText={formErrors.description}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="Contact Number"
-                error={formErrors.userContactNumber == null ? false : true}
+                label="Duration"
+                error={formErrors.duration == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="Contact Number"
-                id="userContactNumber"
-                value={data.userContactNumber}
+                placeholder="duration"
+                id="duration"
                 type="text"
-                helperText={formErrors.userContactNumber}
-              />
-              &nbsp;
-              <TextField
-                className={classes.inputfield}
-                fullWidth
-                label="Email"
-                error={formErrors.userEmail == null ? false : true}
-                onChange={(e) => handle(e)}
-                placeholder="Email"
-                id="userEmail"
-                value={data.userEmail}
-                type="email"
-                helperText={formErrors.userEmail}
-              />
-              &nbsp;
-              <TextField
-                className={classes.inputfield}
-                fullWidth
-                label="DOB"
-                error={formErrors.userDOB == null ? false : true}
-                onChange={(e) => handle(e)}
-                placeholder="yyyy/mm/dd"
-                id="userDOB"
-                value={data.userDOB}
-                type="text"
-                helperText={formErrors.userDOB}
+                helperText={formErrors.duration}
               />
             </Box>
+            <br></br>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <br></br>
+            <br></br>
+            <CourseSection
+              addNewQuiz={(newQuiz) =>
+                setQuestions((prev) => {
+                  let updateQuiz = [...prev, newQuiz];
+                  return updateQuiz;
+                })
+              }
+            />
+            <br></br>
             <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
               Update
             </Button>
-            &nbsp; &nbsp;
             <Button
               // variant="outlined"
               color="error"

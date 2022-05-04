@@ -204,7 +204,7 @@ const AddNewExam = () => {
             <br></br>
             <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
-              Register
+              SAVE EXAM
             </Button>
             <Button
               // variant="outlined"
