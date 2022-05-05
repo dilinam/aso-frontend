@@ -15,6 +15,8 @@ import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Edit } from "@mui/icons-material";
 import AddNewTenant from "../../components/AddNewTenant";
+import { BASE_URL } from "../../utils/constants";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
 
 const useStyles = makeStyles({
   table: {
@@ -44,21 +46,21 @@ const style = {
   p: 4,
 };
 const Tenants = () => {
-  const [tenets, setTenets] = useState([
+  const [tenants, setTenants] = useState([
     {
-      tenetId: 5,
-      tenetName: "hasitha",
-      tenetDescription: "-coordinate representations (also known as HSL)",
-      tenetAdminPassword: "hasitha",
-      tenetAdminUserName: "hasithae",
+      tenantId: 5,
+      tenantName: "hasitha",
+      description: "-coordinate representations (also known as HSL)",
+      tenantAdminPassword: "hasitha",
+      tenantAdminUserName: "hasithae",
       status: true,
     },
     {
-      tenetId: 6,
-      tenetName: "hasitha",
-      tenetDescription: "-coordinate representations (also known as HSL)",
-      tenetAdminPassword: "hasitha",
-      tenetAdminUserName: "hasithae",
+      tenantId: 6,
+      tenantName: "hasitha",
+      description: "-coordinate representations (also known as HSL)",
+      tenantAdminPassword: "hasitha",
+      tenantAdminUserName: "hasithae",
       status: true,
     },
   ]);
@@ -69,14 +71,11 @@ const Tenants = () => {
   const classes = useStyles();
 
   const errors = {};
-  const TenetList = () => {
-    axios.get("http://localhost:8080/tenets").then((response) => {
-      console.log(response.data);
-      setTenets(response.data);
-    });
-  };
   useEffect(() => {
-    TenetList();
+    AXIOS_INSTANCE.get(BASE_URL + "/api/tenant").then((response) => {
+      console.log(response.data);
+      setTenants(response.data);
+    });
   }, []);
   //modal options
   const [open, setOpen] = React.useState(false);
@@ -92,27 +91,25 @@ const Tenants = () => {
   // form handel
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      axios
-        .put("http://localhost:8080/updateTenet/submit", {
-          tenetId: data.tenetId,
-          tenetName: data.tenetName,
-          tenetDescription: data.tenetDescription,
-          tenetAdminPassword: data.tenetAdminPassword,
-          tenetAdminUserName: data.tenetAdminUserName,
-          status: data.status,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+      AXIOS_INSTANCE.put(BASE_URL + "/api/tenant", {
+        tenantId: data.tenantId,
+        tenantName: data.tenantName,
+        description: data.description,
+        tenantAdminPassword: data.tenantAdminPassword,
+        tenantAdminUserName: data.tenantAdminUserName,
+        status: data.status,
+      }).then(
+        (response) => {
+          console.log(response);
+          setOpen(false);
+          setIsSubmit(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
-  });
+  }, [formErrors, isSubmit]);
 
   const handle = (e) => {
     const newdata = { ...data };
@@ -130,44 +127,45 @@ const Tenants = () => {
     console.log(open);
   };
   const validateInfo = (values) => {
-    if (!values.tenetName.trim()) {
-      errors.tenetName = "Tenet name required.";
+    if (false) {
+      errors.tenantName = "Tenant name required.";
     }
-    if (!values.tenetDescription.trim()) {
-      errors.tenetDescription = "Tenet Description required.";
+    if (false) {
+      errors.description = "Tenant Description required.";
     }
-    if (!values.tenetAdminUserName.trim()) {
-      errors.tenetAdminUserName = "Admin User Name required.";
+    if (false) {
+      errors.tenantAdminUserName = "Admin User Name required.";
     }
-    if (!values.tenetAdminPassword.trim()) {
-      errors.tenetAdminPassword = "Admin Password required.";
+    if (false) {
+      errors.tenantAdminPassword = "Admin Password required.";
     }
     return errors;
   };
   // delete funtion
   const [isDeleted, setIsDeleted] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
-  const deleteTenet = (e) => {
-    setDeleteId(e.tenetId);
+  const deleteTenant = (e) => {
+    setDeleteId(e.tenantId);
     setIsDeleted(true);
-    const index = tenets.findIndex((x) => x.tenetId === deleteId);
+    const index = tenants.findIndex((x) => x.tenantId === deleteId);
     console.log(index);
-    const newtent = tenets.slice(0, index);
-    setTenets(newtent);
+    const newtent = tenants.slice(0, index);
+    setTenants(newtent);
   };
   useEffect(() => {
-    if (isDeleted) {
-      axios.delete(`http://localhost:8080/delete/${deleteId}`, {}).then(
+    if(isDeleted){
+     AXIOS_INSTANCE.delete(BASE_URL + `/api/tenant/${deleteId}`).then(
         (response) => {
           console.log(response);
-          //   window.location.reload(false);
+          setDeleteId();
         },
         (error) => {
           console.log(error);
         }
       );
     }
-  });
+    
+  },[isDeleted]);
   //check box
   const [checked, setChecked] = useState();
   const ischecked = (e) => {
@@ -175,9 +173,9 @@ const Tenants = () => {
     setChecked(e.target.value === "true" ? true : false);
     newdata.status = !checked;
     setData(newdata);
-    const index = tenets.findIndex((x) => x.tenetId === data.tenetId);
-    tenets[index].status = !checked;
-    console.log(tenets[index].status);
+    const index = tenants.findIndex((x) => x.tenantId === data.tenantId);
+    tenants[index].status = !checked;
+    console.log(tenants[index].status);
   };
   const cancel = (e) => {
     e.preventDefault();
@@ -186,7 +184,7 @@ const Tenants = () => {
   };
   return (
     <div>
-      <AddNewTenant/>
+      <AddNewTenant />
       &nbsp; &nbsp; &nbsp;
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
@@ -201,21 +199,21 @@ const Tenants = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tenets.map((tenet) => (
-              <TableRow key={tenet.tenetId}>
-                <TableCell align="right">{tenet.tenetId}</TableCell>
-                <TableCell align="right">{tenet.tenetName}</TableCell>
-                <TableCell align="right">{tenet.tenetAdminUserName}</TableCell>
-                <TableCell align="right">{tenet.tenetDescription}</TableCell>
-                <TableCell align="right">{tenet.tenetAdminPassword}</TableCell>
-                <TableCell align="right">{tenet.status.toString()}</TableCell>
+            {tenants.map((tenant) => (
+              <TableRow key={tenant.tenantId}>
+                <TableCell align="right">{tenant.tenantId}</TableCell>
+                <TableCell align="right">{tenant.tenantName}</TableCell>
+                <TableCell align="right">{tenant.tenantAdminUserName}</TableCell>
+                <TableCell align="right">{tenant.description}</TableCell>
+                <TableCell align="right">{tenant.password}</TableCell>
+                <TableCell align="right">{tenant.status.toString()}</TableCell>
                 <TableCell align="right">
-                  <Button onClick={() => handleOpen(tenet)} endIcon={<Edit />}>
+                  <Button onClick={() => handleOpen(tenant)} endIcon={<Edit />}>
                     Edit
                   </Button>
                   <Modal open={open} onClose={handleClose}>
                     <Box sx={style}>
-                      <form key={tenet.tenetId}>
+                      <form key={tenant.tenantId}>
                         <Box
                           sx={{
                             width: 500,
@@ -225,27 +223,27 @@ const Tenants = () => {
                           <TextField
                             className={classes.inputfield}
                             fullWidth
-                            label="Tenet Name"
-                            error={formErrors.tenetName == null ? false : true}
+                            label="Tenant Name"
+                            error={formErrors.tenantName == null ? false : true}
                             onChange={(e) => handle(e)}
-                            placeholder="Tenet Name"
-                            id="tenetName"
-                            value={data.tenetName}
+                            placeholder="Tenant Name"
+                            id="tenantName"
+                            value={data.tenantName}
                             type="text"
-                            helperText={formErrors.tenetName}
+                            helperText={formErrors.tenantName}
                           />
                           &nbsp;
                           <TextField
                             className={classes.inputfield}
-                            label="Tenet Description"
+                            label="Tenant Description"
                             onChange={(e) => handle(e)}
-                            id="tenetDescription"
-                            value={data.tenetDescription}
-                            placeholder="Tenet Description"
+                            id="description"
+                            value={data.description}
+                            placeholder="Tenant Description"
                             type="text"
                             multiline
                             error={
-                              formErrors.tenetDescription == null ? false : true
+                              formErrors.description == null ? false : true
                             }
                             maxRows={4}
                           />
@@ -253,35 +251,35 @@ const Tenants = () => {
                           <TextField
                             className={classes.inputfield}
                             fullWidth
-                            label="Tenet Admin User Name"
+                            label="Tenant Admin User Name"
                             error={
-                              formErrors.tenetAdminUserName == null
+                              formErrors.tenantAdminUserName == null
                                 ? false
                                 : true
                             }
                             onChange={(e) => handle(e)}
-                            placeholder="Tenet Admin User Name"
-                            id="tenetAdminUserName"
-                            value={data.tenetAdminUserName}
+                            placeholder="Tenant Admin User Name"
+                            id="tenantAdminUserName"
+                            value={data.tenantAdminUserName}
                             type="text"
-                            helperText={formErrors.tenetAdminUserName}
+                            helperText={formErrors.tenantAdminUserName}
                           />
                           &nbsp;
                           <TextField
                             className={classes.inputfield}
                             fullWidth
-                            label="Tenet Admin Password"
+                            label="Tenant Admin Password"
                             error={
-                              formErrors.tenetAdminPassword == null
+                              formErrors.tenantAdminPassword == null
                                 ? false
                                 : true
                             }
                             onChange={(e) => handle(e)}
-                            placeholder="Tenet Admin Password"
-                            id="tenetAdminPassword"
-                            value={data.tenetAdminPassword}
+                            placeholder="Tenant Admin Password"
+                            id="tenantAdminPassword"
+                            value={data.tenantAdminPassword}
                             type="password"
-                            helperText={formErrors.tenetAdminPassword}
+                            helperText={formErrors.tenantAdminPassword}
                           />
                         </Box>
                         &nbsp;
@@ -321,7 +319,7 @@ const Tenants = () => {
                     variant="outlined"
                     color="error"
                     size="small"
-                    onClick={() => deleteTenet(tenet)}
+                    onClick={() => deleteTenant(tenant)}
                     endIcon={<DeleteIcon />}
                   >
                     Delete

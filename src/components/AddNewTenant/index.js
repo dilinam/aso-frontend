@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import { PersonAdd } from "@mui/icons-material";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -31,34 +33,32 @@ const AddNewTenant = () => {
   const errors = {};
   const classes = useStyles();
   const [data, setData] = useState({
-    tenetName: "",
-    tenetDescription: "",
-    tenetAdminPassword: "",
-    tenetAdminUserName: "",
+    tenantName: "",
+    description: "",
+    tenantAdminPassword: "",
+    tenantAdminUserName: "",
   });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
    useEffect(() => {
      if (Object.keys(formErrors).length === 0 && isSubmit) {
-       axios
-         .post("http://localhost:8080/tenants/submit", {
-           tenetName: data.tenetName,
-           tenetDescription: data.tenetDescription,
-           tenetAdminPassword: data.tenetAdminPassword,
-           tenetAdminUserName: data.tenetAdminUserName,
-         })
-         .then(
-           (response) => {
-             console.log(response);
-             setOpen(false);
-             setIsSubmit(false);
-           },
-           (error) => {
-             console.log(error);
-           }
-         );
+       AXIOS_INSTANCE.post(BASE_URL + "/api/tenant", {
+         tenantName: data.tenantName,
+         description: data.description,
+         tenantAdminPassword: data.tenantAdminPassword,
+         tenantAdminUserName: data.tenantAdminUserName,
+       }).then(
+         (response) => {
+           console.log(response);
+           setOpen(false);
+           setIsSubmit(false);
+         },
+         (error) => {
+           console.log(error);
+         }
+       );
      }
-   });
+   },[formErrors, isSubmit]);
     const handle = (e) => {
       const newdata = { ...data };
       newdata[e.target.id] = e.target.value;
@@ -75,17 +75,17 @@ const AddNewTenant = () => {
       console.log(open);
     };
     const validateInfo = (values) => {
-      if (!values.tenetName.trim()) {
-        errors.tenetName = "Tenet name required.";
+      if (false) {
+        errors.tenantName = "Tenant name required.";
       }
-      if (!values.tenetDescription.trim()) {
-        errors.tenetDescription = "Tenet Description required.";
+      if (false) {
+        errors.description = "Tenant Description required.";
       }
-      if (!values.tenetAdminUserName.trim()) {
-        errors.tenetAdminUserName = "Admin User Name required.";
+      if (false) {
+        errors.tenantAdminUserName = "Admin User Name required.";
       }
-      if (!values.tenetAdminPassword.trim()) {
-        errors.tenetAdminPassword = "Admin Password required.";
+      if (false) {
+        errors.tenantAdminPassword = "Admin Password required.";
       }
       return errors;
     };
@@ -119,53 +119,53 @@ const AddNewTenant = () => {
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="Tenet Name"
-                error={formErrors.tenetName == null ? false : true}
+                label="Tenant Name"
+                error={formErrors.tenantName == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="Tenet Name"
-                id="tenetName"
-                value={data.tenetName}
+                placeholder="Tenant Name"
+                id="tenantName"
+                value={data.tenantName}
                 type="text"
-                helperText={formErrors.tenetName}
+                helperText={formErrors.tenantName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
-                label="Tenet Description"
+                label="Tenant Description"
                 onChange={(e) => handle(e)}
-                id="tenetDescription"
-                value={data.tenetDescription}
-                placeholder="Tenet Description"
+                id="description"
+                value={data.description}
+                placeholder="Tenant Description"
                 type="text"
                 multiline
-                error={formErrors.tenetDescription == null ? false : true}
+                error={formErrors.description == null ? false : true}
                 maxRows={4}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="Tenet Admin User Name"
-                error={formErrors.tenetAdminUserName == null ? false : true}
+                label="Tenant Admin User Name"
+                error={formErrors.tenantAdminUserName == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="Tenet Admin User Name"
-                id="tenetAdminUserName"
-                value={data.tenetAdminUserName}
+                placeholder="Tenant Admin User Name"
+                id="tenantAdminUserName"
+                value={data.tenantAdminUserName}
                 type="text"
-                helperText={formErrors.tenetAdminUserName}
+                helperText={formErrors.tenantAdminUserName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="Tenet Admin Password"
-                error={formErrors.tenetAdminPassword == null ? false : true}
+                label="Tenant Admin Password"
+                error={formErrors.tenantAdminPassword == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="Tenet Admin Password"
-                id="tenetAdminPassword"
-                value={data.tenetAdminPassword}
+                placeholder="Tenant Admin Password"
+                id="tenantAdminPassword"
+                value={data.tenantAdminPassword}
                 type="password"
-                helperText={formErrors.tenetAdminPassword}
+                helperText={formErrors.tenantAdminPassword}
               />
               &nbsp;
             </Box>

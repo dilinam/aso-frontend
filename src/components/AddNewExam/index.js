@@ -39,15 +39,15 @@ const AddNewExam = () => {
   const [data, setData] = useState({
     dateTime: "",
   });
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const [questions, setQuestions] = React.useState([]);
+  const [questions, setQuestions] = useState([]);
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       AXIOS_INSTANCE.post(BASE_URL + "/api/exam", {
         questions: questions,
-        exam : data
+        exam: data,
       }).then(
         (response) => {
           console.log(response);
@@ -108,7 +108,7 @@ const AddNewExam = () => {
   };
   const handleChange = (newValue) => {
     const newdata = { ...data };
-    newdata.dateTime = String(newValue);
+    newdata.dateTime = newValue;
     setData(newdata);
     console.log(data);
   };
