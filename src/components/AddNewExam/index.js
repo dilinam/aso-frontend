@@ -61,7 +61,7 @@ const AddNewExam = () => {
         }
       );
     }
-  });
+  },[formErrors,isSubmit]);
   const handle = (e) => {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value;
