@@ -12,7 +12,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Checkbox from "@mui/material/Checkbox";
 
 const CourseSection = (props) => {
-  const [selectedValue, setSelectedValue] = React.useState("mcq");
+  const [quizType, setquizType] = React.useState("stuctured");
+  const [mcqSingleAnswer, setMcqSingleAnswer] = React.useState(null);
   const [decision, setDecision] = React.useState("check");
   const [essayAnswerType, setEssayAnswerType] = React.useState("submit-box");
 
@@ -21,20 +22,24 @@ const CourseSection = (props) => {
   const handleClose = () => setOpen(false);
 
   const [quiz, setQuiz] = React.useState({
-    quizNumber: 0,
+    oder: 0,
+    quizTypeId: quizType,
     question: "",
     answers: ["", "", "", ""],
   });
   // console.log(quiz.question);
-  React.useEffect(()=>{
-    
-  },[quiz])
+  React.useEffect(() => {}, [quiz]);
 
+  // handle what type of question box should create (mcq, essay, stuctured)
   const questionTypeHandler = (event) => {
-    // handle what type of question box should create (mcq, essay, stuctured)
-    setSelectedValue(event.target.value);
-    console.log(event.target.checked);
+    quiz.quizTypeId = event.target.value;
+    setquizType(event.target.value);
   };
+
+  React.useEffect(() => {
+    console.log(quizType);
+    console.log(quiz.quizTypeId);
+  }, [quizType]);
 
   const essayAnswerTypeHandler = (e) => {
     // hadle how essay answers should input
@@ -49,6 +54,19 @@ const CourseSection = (props) => {
       console.log("check");
       setDecision("check");
     }
+  };
+
+  // const singleMcqAnswersHandler = (e) => {
+  //   setMcqSingleAnswer((prev) => {
+  //     prev = e.target.value;
+  //     console.log(prev);
+  //     return prev;
+  //   });
+  // };
+
+  const singleMcqAnswersHandler = (e) => {
+    setMcqSingleAnswer(e.target.value);
+    console.log(e.target.value);
   };
 
   const style = {
@@ -66,8 +84,6 @@ const CourseSection = (props) => {
   // const Input = styled("input")({
   //   display: "none",
   // });
-
-  
 
   return (
     <>
@@ -97,7 +113,7 @@ const CourseSection = (props) => {
             <Box>
               Mcq Question
               <Radio
-                checked={selectedValue === "mcq"}
+                checked={quizType === "mcq"}
                 onChange={questionTypeHandler}
                 value="mcq"
                 name="radio-buttons"
@@ -107,7 +123,7 @@ const CourseSection = (props) => {
             <Box>
               Stuctured Question{" "}
               <Radio
-                checked={selectedValue === "stuctured"}
+                checked={quizType === "stuctured"}
                 onChange={questionTypeHandler}
                 value="stuctured"
                 name="radio-buttons"
@@ -117,7 +133,7 @@ const CourseSection = (props) => {
             <Box>
               Essay Question{" "}
               <Radio
-                checked={selectedValue === "essay"}
+                checked={quizType === "essay"}
                 onChange={questionTypeHandler}
                 value="essay"
                 name="radio-buttons"
@@ -177,24 +193,26 @@ const CourseSection = (props) => {
             );
           })} */}
 
-          {selectedValue === "mcq" ? ( // check the question type and chnage the layout of each question display to the end user
+          {quizType === "mcq" ? ( // check the question type and chnage the layout of each question display to the end user
             quiz.answers.map((item, index) => {
-              index = index +1;
+              index = index + 1;
               return (
                 <Box sx={{ display: "flex" }}>
                   {decision === "check" ? (
                     <Checkbox
                       inputProps={{ "aria-label": "controlled" }}
                       value={index}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                      }}
                     />
                   ) : (
                     <Radio
                       name="radio-buttons"
+                      checked={mcqSingleAnswer === index}
+                      // inputProps={{ "aria-label": "A" }}
                       value={index}
-                      inputProps={{ "aria-label": "A" }}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
+                      onChange={singleMcqAnswersHandler}
                     />
                   )}
 
@@ -207,17 +225,17 @@ const CourseSection = (props) => {
                     onChange={(e) => {
                       setQuiz((prev) => {
                         let temp = { ...prev };
-                        temp.answers[index-1] = e.target.value;
+                        temp.answers[index - 1] = e.target.value;
                         return temp;
                       });
                     }}
-                    label={"Answer " + (index )}
+                    label={"Answer " + index}
                     sx={{ alignContent: "center", p: 1 }}
                   />
                 </Box>
               );
             })
-          ) : selectedValue === "essay" ? (
+          ) : quizType === "essay" ? (
             <Box
               sx={{
                 width: "80%",
@@ -288,7 +306,7 @@ const CourseSection = (props) => {
               p: 1,
             }}
           >
-            {selectedValue === "mcq" ? ( // if selected question type is mcq this will display and ask to choose it has single or multiple answers
+            {quizType === "mcq" ? ( // if selected question type is mcq this will display and ask to choose it has single or multiple answers
               <Box>
                 Multiple Question
                 <ToggleButtonGroup

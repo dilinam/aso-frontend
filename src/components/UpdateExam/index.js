@@ -24,94 +24,94 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
-  bgcolor: "rgba(58, 56, 69,0.6)",
+  bgcolor: "rgba(58, 56, 69,0.9)",
   border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
   p: 4,
-  overflowY: "scroll",
+  // overflowY: "scroll",
 };
 
 const UpdateExam = () => {
-     const errors = {};
-     const classes = useStyles();
-     const [data, setData] = useState({
-       dateTime: "",
-     });
-     const [open, setOpen] = React.useState(false);
-     const [formErrors, setFormErrors] = useState({});
-     const [isSubmit, setIsSubmit] = useState(false);
-     const [questions, setQuestions] = React.useState([]);
-     useEffect(() => {
-       if (Object.keys(formErrors).length === 0 && isSubmit) {
-         AXIOS_INSTANCE.put(BASE_URL + "/api/exam", {
-           exam: data,
-         }).then(
-           (response) => {
-             console.log(response);
-             setOpen(false);
-             setIsSubmit(false);
-           },
-           (error) => {
-             console.log(error);
-             setOpen(false);
-             setIsSubmit(false);
-           }
-         );
-       }
-     }, [formErrors,isSubmit]);
-     const handle = (e) => {
-       const newdata = { ...data };
-       newdata[e.target.id] = e.target.value;
-       setData(newdata);
-       console.log(newdata);
-     };
-     const submit = (e) => {
-       e.preventDefault();
-       setFormErrors(validateInfo(data));
-       setIsSubmit(true);
-       if (errors.length > 0) {
-         setOpen(false);
-       }
-       console.log(open);
-     };
-     useEffect(() => {
-       setFormErrors({});
-     }, [open]);
-     const validateInfo = (values) => {
-       console.log(values);
-       if (false) {
-         errors.name = "name required.";
-       }
-       if (false) {
-         errors.description = "Description required.";
-       }
-       if (false) {
-         errors.description = "DateTime required.";
-       }
-       return errors;
-     };
-     //modal options
+  const errors = {};
+  const classes = useStyles();
+  const [data, setData] = useState({
+    dateTime: "",
+  });
+  const [open, setOpen] = React.useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [questions, setQuestions] = React.useState([]);
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      AXIOS_INSTANCE.put(BASE_URL + "/api/exam", {
+        exam: data,
+      }).then(
+        (response) => {
+          console.log(response);
+          setOpen(false);
+          setIsSubmit(false);
+        },
+        (error) => {
+          console.log(error);
+          setOpen(false);
+          setIsSubmit(false);
+        }
+      );
+    }
+  }, [formErrors, isSubmit]);
+  const handle = (e) => {
+    const newdata = { ...data };
+    newdata[e.target.id] = e.target.value;
+    setData(newdata);
+    console.log(newdata);
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    setFormErrors(validateInfo(data));
+    setIsSubmit(true);
+    if (errors.length > 0) {
+      setOpen(false);
+    }
+    console.log(open);
+  };
+  useEffect(() => {
+    setFormErrors({});
+  }, [open]);
+  const validateInfo = (values) => {
+    console.log(values);
+    if (false) {
+      errors.name = "name required.";
+    }
+    if (false) {
+      errors.description = "Description required.";
+    }
+    if (false) {
+      errors.description = "DateTime required.";
+    }
+    return errors;
+  };
+  //modal options
 
-     const handleOpen = () => {
-       setOpen(true);
-     };
-     const handleClose = (e) => {
-       setOpen(false);
-     };
-     const cancel = (e) => {
-       e.preventDefault();
-       setOpen(false);
-     };
-     const handleChange = (newValue) => {
-       const newdata = { ...data };
-       newdata.dateTime = String(newValue);
-       setData(newdata);
-       console.log(data);
-     };
-     React.useEffect(() => {
-       console.log(questions);
-     }, [questions]);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (e) => {
+    setOpen(false);
+  };
+  const cancel = (e) => {
+    e.preventDefault();
+    setOpen(false);
+  };
+  const handleChange = (newValue) => {
+    const newdata = { ...data };
+    newdata.dateTime = String(newValue);
+    setData(newdata);
+    console.log(data);
+  };
+  React.useEffect(() => {
+    console.log(questions);
+  }, [questions]);
   return (
     <div>
       <Button onClick={() => handleOpen()} endIcon={<Settings />} color="error">

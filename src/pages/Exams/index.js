@@ -40,49 +40,52 @@ const Exams = () => {
       deleted: false,
     },
   ]);
-  useEffect(()=>{
-    AXIOS_INSTANCE.get(BASE_URL+"/api/exam").then((response) => {
+  useEffect(() => {
+    AXIOS_INSTANCE.get(BASE_URL + "/api/exam").then((response) => {
       console.log(response.data);
       setExamData(response.data);
     });
-  },[]);
+  }, []);
   return (
     <Grid container spacing={5}>
-      <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={2}>
-          {examData.map((exam) => (
-            <Grid key={exam.examID} item alignItems="center">
-              <Paper
-                sx={{
-                  height: "20em",
-                  width: "15em",
-                  "&:hover": {
-                    backgroundColor: "rgba(210, 231, 247, 0.3)",
-                  },
-                  border: "2px solid #82b1ff",
-                }}
+      {examData.map((exam) => (
+        <Grid item key={exam.examID} alignItems="center">
+          <Paper
+            sx={{
+              height: "20em",
+              width: "15em",
+              "&:hover": {
+                backgroundColor: "rgba(210, 231, 247, 0.3)",
+              },
+              border: "2px solid #82b1ff",
+            }}
+          >
+            <div style={{ margin: "2px" }}>
+              <h2 style={{ textAlign: "center" }}>{exam.name}</h2>
+              {/* <h5>{exam.decription}</h5> */}
+              <h5 style={{ textAlign: "center" }}>
+                date and time : {exam.dateTime}
+              </h5>
+              <h5 style={{ textAlign: "center" }}>
+                duration : {exam.duration}
+              </h5>
+            </div>
+            <Box textAlign="center">
+              <Button
+                sx={{ width: "15em" }}
+                variant="contained"
+                href="#contained-buttons"
               >
-                <div>
-                  <h2>{exam.name}</h2>
-                  {/* <h5>{exam.decription}</h5> */}
-                  <h5>date and time : {exam.dateTime}</h5>
-                  <h5>duration : {exam.duration}</h5>
-                </div>
-                <Box textAlign="center">
-                  <Button
-                    sx={{ width: "15em" }}
-                    variant="contained"
-                    href="#contained-buttons"
-                  >
-                    Start
-                  </Button>
-                  <UpdateExam/>
-                </Box>
-              </Paper>
-            </Grid>
-          ))}
-          <AddNewExam/>
+                Start
+              </Button>
+              <UpdateExam />
+            </Box>
+          </Paper>
         </Grid>
+      ))}
+      <Grid item>
+        {" "}
+        <AddNewExam />
       </Grid>
     </Grid>
   );
