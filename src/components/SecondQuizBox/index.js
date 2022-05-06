@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-const SecondQuizBox = ({ quizNumber, question, answers }) => {
+const SecondQuizBox = ({ quizNumber, question }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -30,7 +30,7 @@ const SecondQuizBox = ({ quizNumber, question, answers }) => {
       <Box
         sx={{
           width: "90%",
-          height: 300,
+          height: 150,
           backgroundColor: "#212121",
           color: "#fff",
           mx: "auto",
@@ -59,6 +59,9 @@ const SecondQuizBox = ({ quizNumber, question, answers }) => {
             <Button onClick={handleOpen}>Change</Button>
           </Box>
         </Box>
+        <Typography variant="subtitle1" gutterBottom component="div">
+          {question}
+        </Typography>
         <Modal
           open={open}
           onClose={handleClose}

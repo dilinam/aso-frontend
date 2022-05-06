@@ -57,6 +57,9 @@ const QuizBox = ({ quizNumber, question, answers }) => {
               value={value}
               control={<Checkbox />}
               label={value + ". " + answer}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
             />
           );
         })}
@@ -75,9 +78,12 @@ const QuizBox = ({ quizNumber, question, answers }) => {
             value = value + 1;
             return (
               <FormControlLabel
-                value={value + 1}
+                value={value}
                 control={<Radio />}
                 label={value + ". " + answer}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                }}
               />
             );
           })}
