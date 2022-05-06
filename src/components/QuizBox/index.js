@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 
-const QuizBox = ({ quizNumber, question, answers }) => {
+const QuizBox = ({ order, question, answers }) => {
   const [decision, setDecision] = React.useState("check");
   const [editQuiz, setEditQuiz] = React.useState(question);
   const [newQuiz, setNewQuiz] = React.useState(question);
@@ -122,7 +122,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h6">Question {quizNumber} </Typography>
+        <Typography variant="h6">Question {order} </Typography>
 
         <Box>
           <Button onClick={handleOpen}>Change</Button>
@@ -150,7 +150,7 @@ const QuizBox = ({ quizNumber, question, answers }) => {
             <TextField
               sx={{ m: 1 }}
               fullWidth
-              label={"Question " + quizNumber}
+              label={"Question " + order}
               id="fullWidth"
               variant="outlined"
               onChange={quizChange}
