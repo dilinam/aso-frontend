@@ -12,19 +12,17 @@ import Grid from '@mui/material/Grid';
 
 
 
-const Course = ({courseId, courseCode, courseName, image}) => {
-
-
-    return(
-      <Card sx={{ minWidth: 275 }}>
-         <CardMedia
-         elevation = {1}
+const Course = ({ courseId, courseDescription, courseName, courseImage, courseCode }) => {
+  return (
+    <Card sx={{ minWidth: 275 }}>
+      <CardMedia
+        elevation={1}
         component="img"
         height="140"
-        image= {image}
+        image={courseImage}
         alt="green iguana"
       />
-      <CardContent style={{padding:'0', margin:'0'}}>
+      <CardContent style={{ padding: "0", margin: "0" }}>
         <Typography variant="h5" component="div" textAlign="center">
           {courseCode}
         </Typography>
@@ -33,20 +31,21 @@ const Course = ({courseId, courseCode, courseName, image}) => {
         </Typography>
       </CardContent>
       <Grid container direction="row" alignItems="center" spacing={15}>
-      <Grid item>
-      <CardActions style={{margin:'0'}} >
-        <Button size="small"  varient='text' >Goto Course</Button>
-      </CardActions>
-      </Grid>
-      <Grid item>
-      <Badge color="secondary" badgeContent={4} >
-        <MailIcon style={{margin:'0'}} />
-      </Badge>
-      </Grid>
+        <Grid item>
+          <CardActions style={{ margin: "0" }}>
+            <Button size="small" varient="text">
+              Goto Course
+            </Button>
+          </CardActions>
+        </Grid>
+        <Grid item>
+          <Badge color="secondary" badgeContent={4}>
+            <MailIcon style={{ margin: "0" }} />
+          </Badge>
+        </Grid>
       </Grid>
     </Card>
-  
-    );
-}
+  );
+};
 
 export default Course;
