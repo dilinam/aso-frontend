@@ -1,13 +1,15 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import QuizBox from "../../components/QuizBox";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import CourseSection from "../CourseSection";
 import CountdownTimer from "../../components/CountdownTimer";
 import SecondQuizBox from "../../components/SecondQuizBox";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
 
 const QuizPage = () => {
-  const [questions, setQuestions] = React.useState([
+  const [questions, setQuestions] = useState([
     {
       oder: 1,
       quizTypeId: "mcq",
@@ -37,6 +39,15 @@ const QuizPage = () => {
       answers: ["fgfdgdfg", "dfsadfas", "dfsdfs", "dfdfdsaf"],
     },
   ]);
+  useEffect(() => {
+    AXIOS_INSTANCE.get(BASE_URL + "/api/exam/examQuestion/1").then(
+      (response) => {
+        console.log(response.data);
+        setQuestions(response.data);
+        alert("sucess")
+      }
+    );
+  }, []);
 
   return (
     <>
@@ -59,7 +70,7 @@ const QuizPage = () => {
             //     <QuizBox {...q} />
             //   </Box>
             // );
-            if (q.quizTypeId === "mcq") {
+            if (true) {
               return (
                 <Box>
                   <QuizBox {...q} />
