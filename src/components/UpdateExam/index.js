@@ -35,9 +35,7 @@ const style = {
 const UpdateExam = (props) => {
   const errors = {};
   const classes = useStyles();
-  const [data, setData] = useState({
-    dateTime: "",
-  });
+  const [data, setData] = useState({});
   const [open, setOpen] = React.useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
@@ -45,7 +43,17 @@ const UpdateExam = (props) => {
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       AXIOS_INSTANCE.put(BASE_URL + "/api/exam", {
-        exam: data,
+        dateTime: data.dateTime,
+        duration: data.duration,
+        examDescription: data.examDescription,
+        examName: data.examName,
+        examId: data.examId,
+        deleted: data.deleted,
+        course: data.course,
+        createdAt:data.createdAt,
+        createdBy:data.createdBy,
+        forAll:data.forAll,
+        status:data.status
       }).then(
         (response) => {
           console.log(response);
@@ -60,6 +68,9 @@ const UpdateExam = (props) => {
       );
     }
   }, [formErrors, isSubmit]);
+  useEffect(() => {
+    setData(props.exam)
+  }, []);
   const handle = (e) => {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value;
@@ -133,7 +144,7 @@ const UpdateExam = (props) => {
                 label="Name"
                 error={formErrors.name == null ? false : true}
                 onChange={(e) => handle(e)}
-                value={props.exam.examName}
+                value={data.examName}
                 id="examName"
                 type="text"
                 helperText={formErrors.name}
@@ -144,7 +155,7 @@ const UpdateExam = (props) => {
                 label="Description"
                 onChange={(e) => handle(e)}
                 id="examDescription"
-                value={props.exam.examDescription}
+                value={data.examDescription}
                 type="text"
                 multiline
                 error={formErrors.description == null ? false : true}
@@ -159,7 +170,7 @@ const UpdateExam = (props) => {
                 error={formErrors.duration == null ? false : true}
                 onChange={(e) => handle(e)}
                 // placeholder="duration"
-                value={props.exam.duration}
+                value={data.duration}
                 id="duration"
                 type="text"
                 helperText={formErrors.duration}
