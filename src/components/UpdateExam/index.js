@@ -32,7 +32,7 @@ const style = {
   // overflowY: "scroll",
 };
 
-const UpdateExam = () => {
+const UpdateExam = (props) => {
   const errors = {};
   const classes = useStyles();
   const [data, setData] = useState({
@@ -126,14 +126,14 @@ const UpdateExam = () => {
                 maxWidth: "100%",
               }}
             >
-              <h1>Add New Exam</h1>
+              <h1>Update Exam</h1>
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Name"
                 error={formErrors.name == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="Name"
+                value={props.exam.examName}
                 id="examName"
                 type="text"
                 helperText={formErrors.name}
@@ -144,7 +144,7 @@ const UpdateExam = () => {
                 label="Description"
                 onChange={(e) => handle(e)}
                 id="examDescription"
-                placeholder="Description"
+                value={props.exam.examDescription}
                 type="text"
                 multiline
                 error={formErrors.description == null ? false : true}
@@ -158,7 +158,8 @@ const UpdateExam = () => {
                 label="Duration"
                 error={formErrors.duration == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="duration"
+                // placeholder="duration"
+                value={props.exam.duration}
                 id="duration"
                 type="text"
                 helperText={formErrors.duration}

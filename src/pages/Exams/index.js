@@ -78,7 +78,7 @@ const Exams = () => {
               >
                 Start
               </Button>
-              <UpdateExam />
+              <UpdateExam exam ={exam}/>
             </Box>
           </Paper>
         </Grid>
