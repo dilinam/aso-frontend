@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 
-const CountdownTimer = () => {
+const CountdownTimer = (props) => {
   const [remainingTime, setRemainingTime] = useState(0);
   const timerId = useRef();
 
   useEffect(() => {
     timerId.current = setInterval(() => {
       setRemainingTime((prev) => prev + 1);
-    }, 1000);
+    },1000);
   }, []);
 
-  var value = 10 - remainingTime;
+  var value = props.duration - remainingTime;
   if (value == 0) {
     clearInterval(timerId.current);
   }
   const converter = (val) => {
-    var min = ("0" + (Math.floor(val / 60) % 60)).slice(-2);
     var hour = ("0" + (Math.floor(val / 3600) % 24)).slice(-2);
+    var min = ("0" + (Math.floor(val / 60) % 60)).slice(-2);  
     var sec = ("0" + (val % 60)).slice(-2);
     return hour + ":" + min + ":" + sec;
   };
