@@ -5,18 +5,31 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TextField from "@mui/material/TextField";
 import Paper from "@material-ui/core/Paper";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
+import { BASE_URL } from "../../utils/constants";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import AddNewUser from "../../components/AddNewUser";
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
-
+  inputfield: {
+    width: 500,
+    maxWidth: "100%",
+    marginTop: "100px",
+  },
+  link: {
+    color: "#fff",
+    textDecoration: "none",
+    marginTop: "25px",
+  },
 });
 const style = {
   position: "absolute",
@@ -30,8 +43,8 @@ const style = {
   p: 4,
 };
 
-function Users(props) {
-  const [tenets, setTenets] = useState([]);
+function Users() {
+  const [users, setUsers] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [data, setData] = useState({});
@@ -39,17 +52,14 @@ function Users(props) {
   const classes = useStyles();
 
   const errors = {};
-  const TenetList = () => {
-    axios.get("http://localhost:8080/tenets").then((response) => {
-      console.log(response.data);
-      setTenets(response.data);
-    });
-  };
   useEffect(() => {
-    TenetList();
-  },[]);
+    AXIOS_INSTANCE.get(BASE_URL + "/api/users").then((response) => {
+      console.log(response.data);
+      setUsers(response.data);
+    });
+  }, []);
   //modal options
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
     setOpen(true);
     const newdata = { ...data, ...e };
@@ -63,19 +73,26 @@ function Users(props) {
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       axios
-        .put("http://localhost:8080/updateTenet/submit", {
-          tenetId: data.tenetId,
-          tenetName: data.tenetName,
-          tenetDescription: data.tenetDescription,
-          tenetAdminPassword: data.tenetAdminPassword,
-          tenetAdminUserName: data.tenetAdminUserName,
+        .put("http://localhost:8080/updateUser/submit", {
+          userId: data.userId,
+          username: data.username,
+          password: data.password,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          nic: data.nic,
+          address: data.address,
+          contactNo: data.contactNo,
+          email: data.email,
+          dob: data.dob,
           status: data.status,
+          deleted: data.deleted,
+          superAdmin: data.superAdmin,
         })
         .then(
           (response) => {
             console.log(response);
             setOpen(false);
-            setIsSubmit(false)
+            setIsSubmit(false);
             // window.location.reload(false);
           },
           (error) => {
@@ -83,7 +100,7 @@ function Users(props) {
           }
         );
     }
-  });
+  }, [formErrors, isSubmit]);
 
   const handle = (e) => {
     const newdata = { ...data };
@@ -98,32 +115,30 @@ function Users(props) {
     if (errors.length > 0) {
       setOpen(false);
     }
-    console.log(open)
+    console.log(open);
   };
   const validateInfo = (values) => {
-    if (!values.tenetName.trim()) {
-      errors.tenetName = "Tenet name required.";
+    if (false) {
+      errors.username = "User name required.";
     }
-    if (!values.tenetDescription.trim()) {
-      errors.tenetDescription = "Tenet Description required.";
+    if (false) {
+      errors.userDescription = "User Description required.";
     }
     return errors;
   };
   // delete funtion
   const [isDeleted, setIsDeleted] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
-  const deleteTenet = (e) => {
-    setDeleteId(e.tenetId);
+  const deleteUser = (e) => {
+    setDeleteId(e.userId);
     setIsDeleted(true);
-    const index = tenets.findIndex((x) => x.tenetId === deleteId);
-    console.log(index)
-    const newtent = tenets.slice(0, index);
-    setTenets(newtent)
-
+    const index = users.findIndex((x) => x.userId === deleteId);
+    console.log(index);
+    const newtent = users.slice(0, index);
+    setUsers(newtent);
   };
   useEffect(() => {
     if (isDeleted) {
-      
       axios.delete(`http://localhost:8080/delete/${deleteId}`, {}).then(
         (response) => {
           console.log(response);
@@ -140,75 +155,70 @@ function Users(props) {
   const ischecked = (e) => {
     const newdata = { ...data };
     setChecked(e.target.value === "true" ? true : false);
-    newdata.status =!checked
+    newdata.status = !checked;
     setData(newdata);
-    const index = tenets.findIndex((x) => x.tenetId === data.tenetId);
-    tenets[index].status = !checked
-    console.log(tenets[index].status);
+    const index = users.findIndex((x) => x.userId === data.userId);
+    users[index].status = !checked;
+    console.log(users[index].status);
   };
   const cancel = (e) => {
-      e.preventDefault();
-      setOpen(false)
+    e.preventDefault();
+    setOpen(false);
   };
   return (
     <div>
+      <AddNewUser/>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>name </TableCell>
-              <TableCell align="right">password</TableCell>
-              <TableCell align="right">tenetid</TableCell>
-              <TableCell align="right">status</TableCell>
+              <TableCell align="right">userId</TableCell>
+              <TableCell align="right">username</TableCell>
+              <TableCell align="right">firstName</TableCell>
+              <TableCell align="right">lastName</TableCell>
+              <TableCell align="right">nic</TableCell>
+              <TableCell align="right">address</TableCell>
+              <TableCell align="right">contactNo</TableCell>
+              <TableCell align="right">email</TableCell>
+              <TableCell align="right">dob</TableCell>
+              <TableCell align="right">status </TableCell>
+              <TableCell align="right">superAdmin</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tenets.map((tenet) => (
-              <TableRow key={tenet.tenetId}>
-                <TableCell align="right">{tenet.tenetAdminUserName}</TableCell>
-                <TableCell align="right">{tenet.tenetAdminPassword}</TableCell>
-                <TableCell align="right">{tenet.tenetId}</TableCell>
-                <TableCell align="right">{tenet.status.toString()}</TableCell>
+            {users.map((user) => (
+              <TableRow key={user.userId}>
+                <TableCell align="right">{user.userId}</TableCell>
+                <TableCell align="right">{user.username}</TableCell>
+                <TableCell align="right">{user.firstName}</TableCell>
+                <TableCell align="right">{user.lastName}</TableCell>
+                <TableCell align="right">{user.nic}</TableCell>
+                <TableCell align="right">{user.address}</TableCell>
+                <TableCell align="right">{user.contactNo}</TableCell>
+                <TableCell align="right">{user.email}</TableCell>
+                <TableCell align="right">{user.dob}</TableCell>
+                <TableCell align="right">{user.status.toString()}</TableCell>
                 <TableCell align="right">
-                  <Button onClick={() => handleOpen(tenet)}>Edit</Button>
+                  {user.superAdmin.toString()}
+                </TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => handleOpen(user)}>Edit</Button>
                   <Modal open={open} onClose={handleClose}>
                     <Box sx={style}>
-                      <form key={tenet.tenetId}>
-                        <input
+                      <h1>Edit User</h1>
+                      <form key={user.userId}>
+                        <TextField
+                          className={classes.inputfield}
+                          fullWidth
+                          label="UserName"
+                          error={formErrors.username == null ? false : true}
                           onChange={(e) => handle(e)}
-                          id="tenetName"
-                          value={data.tenetName}
-                          placeholder="Tenet Name"
+                          id="username"
+                          value={data.username}
                           type="text"
-                        ></input>
-                        <p>{formErrors.tenetName}</p>
-
-                        <input
-                          onChange={(e) => handle(e)}
-                          id="tenetDescription"
-                          value={data.tenetDescription}
-                          placeholder="Tenet Description"
-                          type="text"
-                        ></input>
-                        <p>{formErrors.tenetDescription}</p>
-
-                        <input
-                          onChange={(e) => handle(e)}
-                          id="tenetAdminUserName"
-                          value={data.tenetAdminUserName}
-                          placeholder="Tenet Admin User Name"
-                          type="text"
-                        ></input>
-                        <p>{formErrors.tenetAdminUserName}</p>
-                        <input
-                          onChange={(e) => handle(e)}
-                          id="tenetAdminPassword"
-                          value={data.tenetAdminPassword}
-                          placeholder="Tenet Admin Password"
-                          type="password"
-                        ></input>
-                        <p>{formErrors.tenetAdminPassword}</p>
-
+                          helperText={formErrors.username}
+                        />
+                        &nbsp;
                         <input
                           onChange={(e) => ischecked(e)}
                           value={data.status}
@@ -217,7 +227,6 @@ function Users(props) {
                           name="status"
                           checked={data.status ? true : false}
                         ></input>
-
                         <label>Status</label>
                         <br></br>
                         <Button type="submit" onClick={(e) => submit(e)}>
@@ -233,7 +242,7 @@ function Users(props) {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => deleteTenet(tenet)}
+                    onClick={() => deleteUser(user)}
                   >
                     Delete
                   </Button>
@@ -243,7 +252,6 @@ function Users(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <a href="http://localhost:3000/"> + Add New Tenet</a>
     </div>
   );
 }

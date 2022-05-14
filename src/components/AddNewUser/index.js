@@ -160,11 +160,11 @@ const AddNewUser = (props) => {
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="FirstName"
+                label="First Name"
                 error={formErrors.userFirstName == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="FirstName"
-                id="userFirstName"
+                placeholder="First Name"
+                id="first name"
                 type="text"
                 helperText={formErrors.userFirstName}
               />
