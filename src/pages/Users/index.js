@@ -72,33 +72,31 @@ function Users() {
   // form handel
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      axios
-        .put("http://localhost:8080/updateUser/submit", {
-          userId: data.userId,
-          username: data.username,
-          password: data.password,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          nic: data.nic,
-          address: data.address,
-          contactNo: data.contactNo,
-          email: data.email,
-          dob: data.dob,
-          status: data.status,
-          deleted: data.deleted,
-          superAdmin: data.superAdmin,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-            // window.location.reload(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+      AXIOS_INSTANCE.put(BASE_URL + "/api/users", {
+        userId: data.userId,
+        username: data.username,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        nic: data.nic,
+        address: data.address,
+        contactNo: data.contactNo,
+        email: data.email,
+        dob: data.dob,
+        status: data.status,
+        deleted: data.deleted,
+        superAdmin: data.superAdmin,
+      }).then(
+        (response) => {
+          console.log(response);
+          setOpen(false);
+          setIsSubmit(false);
+          // window.location.reload(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }, [formErrors, isSubmit]);
 
