@@ -10,6 +10,12 @@ import Radio from "@mui/material/Radio";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Checkbox from "@mui/material/Checkbox";
+import "../../style/newQuetion.css";
+import FormGroup from "@mui/material/FormGroup";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const CourseSection = (props) => {
   const [quizType, setquizType] = React.useState("stuctured");
@@ -160,81 +166,90 @@ const CourseSection = (props) => {
             sx={{ alignContent: "center", p: 1 }}
           />
 
-          {/* {quiz.answers.map((item, index) => {
-            return (
-              <Box sx={{ display: "flex" }}>
-                {decision === "check" ? (
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                ) : (
-                  <Radio
-                    name="radio-buttons"
-                    value={index}
-                    inputProps={{ "aria-label": "A" }}
-                  />
-                )}
-
-                <TextField
-                  variant="outlined"
-                  color="success"
-                  fullWidth
-                  multiline
-                  value={item}
-                  onChange={(e) => {
-                    setQuiz((prev) => {
-                      let temp = { ...prev };
-                      temp.answers[index] = e.target.value;
-                      return temp;
-                    });
-                  }}
-                  label={"Answer " + (index + 1)}
-                  sx={{ alignContent: "center", p: 1 }}
-                />
-              </Box>
-            );
-          })} */}
-
           {quizType === "mcq" ? ( // check the question type and chnage the layout of each question display to the end user
-            quiz.answers.map((item, index) => {
-              index = index + 1;
-              return (
-                <Box sx={{ display: "flex" }}>
-                  {decision === "check" ? (
-                    <Checkbox
-                      inputProps={{ "aria-label": "controlled" }}
-                      value={index}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
-                    />
-                  ) : (
-                    <Radio
-                      name="radio-buttons"
-                      checked={mcqSingleAnswer === index}
-                      // inputProps={{ "aria-label": "A" }}
-                      value={index}
-                      onChange={singleMcqAnswersHandler}
-                    />
-                  )}
-
-                  <TextField
-                    variant="outlined"
-                    color="success"
-                    fullWidth
-                    multiline
-                    value={item}
-                    onChange={(e) => {
-                      setQuiz((prev) => {
-                        let temp = { ...prev };
-                        temp.answers[index - 1] = e.target.value;
-                        return temp;
-                      });
-                    }}
-                    label={"Answer " + index}
-                    sx={{ alignContent: "center", p: 1 }}
-                  />
-                </Box>
-              );
-            })
+            <>
+              {decision === "radio" ? (
+                <FormControl sx={{ width: "100%" }}>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group"
+                  >
+                    {quiz.answers.map((item, index = 1) => {
+                      index = index + 1;
+                      return (
+                        <FormControlLabel
+                          sx={{ width: "100%" }}
+                          value={index}
+                          control={<Radio />}
+                          label={
+                            <TextField
+                              variant="outlined"
+                              color="success"
+                              fullWidth
+                              multiline
+                              value={item}
+                              onChange={(e) => {
+                                setQuiz((prev) => {
+                                  let temp = { ...prev };
+                                  temp.answers[index - 1] = e.target.value;
+                                  return temp;
+                                });
+                              }}
+                              label={"Answer " + index}
+                              sx={{
+                                alignContent: "center",
+                                p: 1,
+                                width: "100%",
+                              }}
+                            />
+                          }
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                          }}
+                        />
+                      );
+                    })}
+                  </RadioGroup>
+                </FormControl>
+              ) : (
+                <FormGroup>
+                  {quiz.answers.map((answer, value = 1) => {
+                    value = value + 1;
+                    return (
+                      <FormControlLabel
+                        value={value}
+                        control={<Checkbox />}
+                        label={
+                          <TextField
+                            variant="outlined"
+                            color="success"
+                            fullWidth
+                            multiline
+                            value={answer}
+                            onChange={(e) => {
+                              setQuiz((prev) => {
+                                let temp = { ...prev };
+                                temp.answers[value - 1] = e.target.value;
+                                return temp;
+                              });
+                            }}
+                            label={"Answer " + value}
+                            sx={{
+                              alignContent: "center",
+                              p: 1,
+                              width: "100%",
+                            }}
+                          />
+                        }
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                        }}
+                      />
+                    );
+                  })}
+                </FormGroup>
+              )}
+            </>
           ) : quizType === "essay" ? (
             <Box
               sx={{
