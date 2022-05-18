@@ -71,7 +71,7 @@ const QuizPage = () => {
             //     <QuizBox {...q} />
             //   </Box>
             // );
-            if (true) {
+            if (q.questionType.questionTypeName === "mcq") {
               return (
                 <Box>
                   <QuizBox {...q} />

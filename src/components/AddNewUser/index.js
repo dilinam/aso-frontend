@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import {PersonAdd } from "@mui/icons-material";
+import { PersonAdd } from "@mui/icons-material";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import { BASE_URL } from "../../utils/constants";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-
+import moment from "moment";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -41,12 +41,12 @@ const AddNewUser = (props) => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [role, setRole] = useState();
-   
+
   const errors = {};
   // form handel
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      AXIOS_INSTANCE.post(BASE_URL + "/api/users/"+ role, {
+      AXIOS_INSTANCE.post(BASE_URL + "/api/users/" + role, {
         username: data.firstName + data.lastName,
         password: data.password,
         firstName: data.firstName,
@@ -55,7 +55,7 @@ const AddNewUser = (props) => {
         address: data.address,
         contactNo: data.contactNo,
         email: data.email,
-        dob: data.dob,
+        dob: moment(data.dob, "YYYY/MM/DD").unix(),
       }).then(
         (response) => {
           console.log(response);
@@ -119,8 +119,7 @@ const AddNewUser = (props) => {
   };
   const selected = (e) => {
     setRole(e.value.toLowerCase());
-    
-  }
+  };
   return (
     <div>
       <Button onClick={() => handleOpen()} startIcon={<PersonAdd />}>
