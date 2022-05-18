@@ -20,6 +20,8 @@ const QuizBox = ({ oder, question, answers }) => {
   const [editQuiz, setEditQuiz] = React.useState(question);
   const [newQuiz, setNewQuiz] = React.useState(question);
   const [open, setOpen] = React.useState(false);
+  const [newAnswers, setNewAnswers] = React.useState([...answers]);
+  const [editAnswers, setEditAnswers] = React.useState([...answers]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -32,6 +34,7 @@ const QuizBox = ({ oder, question, answers }) => {
   const newQuizSet = () => {
     setOpen(false);
     setNewQuiz(editQuiz);
+    setNewAnswers(editAnswers);
   };
 
   const style = {
@@ -40,7 +43,7 @@ const QuizBox = ({ oder, question, answers }) => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "40%",
-    height: "75%",
+    height: "55%",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -50,7 +53,7 @@ const QuizBox = ({ oder, question, answers }) => {
   const Checkboxes = () => {
     return (
       <FormGroup>
-        {answers.map((answer, value = 1) => {
+        {newAnswers.map((answer, value = 1) => {
           value = value + 1;
           return (
             <FormControlLabel
@@ -74,8 +77,9 @@ const QuizBox = ({ oder, question, answers }) => {
           aria-labelledby="demo-radio-buttons-group-label"
           name="radio-buttons-group"
         >
-          {answers.map((answer, value = 1) => {
+          {newAnswers.map((answer, value = 1) => {
             value = value + 1;
+
             return (
               <FormControlLabel
                 value={value}
@@ -158,7 +162,9 @@ const QuizBox = ({ oder, question, answers }) => {
               focused
               value={editQuiz}
             />
-            {answers.map((answer) => {
+            {editAnswers.map((answer, index = 1) => {
+              index = index + 1;
+              console.log(index);
               return (
                 <TextField
                   sx={{ m: 1 }}
@@ -169,6 +175,13 @@ const QuizBox = ({ oder, question, answers }) => {
                   multiline
                   focused
                   value={answer}
+                  onChange={(e) => {
+                    setEditAnswers((prev) => {
+                      let temp = [...prev];
+                      temp[index - 1] = e.target.value;
+                      return temp;
+                    });
+                  }}
                 />
               );
             })}
@@ -193,6 +206,7 @@ const QuizBox = ({ oder, question, answers }) => {
             sx={{ m: 2 }}
             onClick={() => {
               setEditQuiz(question);
+              setEditAnswers([...answers]);
             }}
           >
             Reset

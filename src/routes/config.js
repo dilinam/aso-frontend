@@ -11,6 +11,7 @@ import TenantLogin from "../pages/TenantLogin";
 import Login from "../pages/Login";
 import Exams from "../pages/Exams";
 import Tenants from "../pages/Tenants";
+import Profile from "../pages/Profile";
 
 const ROUTES = [
   {
@@ -76,6 +77,13 @@ const ROUTES = [
     label: "Tenants",
     path: "/tenants",
     element: <Tenants />,
+    icon: <QuizIcon />,
+  },
+  {
+    id: 11,
+    label: "Profile",
+    path: "/profile",
+    element: <Profile />,
     icon: <QuizIcon />,
   },
 ];
