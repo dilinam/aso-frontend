@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import { BASE_URL } from "../../utils/constants";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import AddNewUser from "../../components/AddNewUser";
+import UpdateList from "../../components/updateForm";
 
 const useStyles = makeStyles({
   table: {
@@ -70,35 +71,7 @@ function Users() {
     setOpen(false);
   };
   // form handel
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      AXIOS_INSTANCE.put(BASE_URL + "/api/users", {
-        userId: data.userId,
-        username: data.username,
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        nic: data.nic,
-        address: data.address,
-        contactNo: data.contactNo,
-        email: data.email,
-        dob: data.dob,
-        status: data.status,
-        deleted: data.deleted,
-        superAdmin: data.superAdmin,
-      }).then(
-        (response) => {
-          console.log(response);
-          setOpen(false);
-          setIsSubmit(false);
-          // window.location.reload(false);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    }
-  }, [formErrors, isSubmit]);
+  
 
   const handle = (e) => {
     const newdata = { ...data };
@@ -137,7 +110,10 @@ function Users() {
   };
   useEffect(() => {
     if (isDeleted) {
-      axios.delete(`http://localhost:8080/delete/${deleteId}`, {}).then(
+      AXIOS_INSTANCE.delete(
+        BASE_URL +"/api/users/"+deleteId ,
+        {}
+      ).then(
         (response) => {
           console.log(response);
           //   window.location.reload(false);
@@ -200,7 +176,8 @@ function Users() {
                   {user.superAdmin.toString()}
                 </TableCell>
                 <TableCell align="right">
-                  <Button onClick={() => handleOpen(user)}>Edit</Button>
+                  <UpdateList data = {user}/>
+                  {/* <Button onClick={() => handleOpen(user)}>Edit</Button>
                   <Modal open={open} onClose={handleClose}>
                     <Box sx={style}>
                       <h1>Edit User</h1>
@@ -235,7 +212,7 @@ function Users() {
                         </Button>
                       </form>
                     </Box>
-                  </Modal>
+                  </Modal> */}
                   &nbsp;
                   <Button
                     variant="contained"
