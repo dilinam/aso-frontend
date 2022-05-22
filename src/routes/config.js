@@ -1,9 +1,9 @@
 // import components here
-import { Dashboard, Group } from "@mui/icons-material";
+import { Group } from "@mui/icons-material";
 import Users from "../pages/Users";
 import Courses from "../pages/Courses";
 import QuizPage from "../pages/QuizPage";
-import CourseSection from "../pages/CourseSection";
+import Dashboard from "../pages/Dashboard";
 import QuizIcon from "@mui/icons-material/Quiz";
 import SecondQuizBox from "../components/SecondQuizBox";
 import AddCourse from "../components/AddCourse";
@@ -18,8 +18,8 @@ const ROUTES = [
     id: 1,
     label: "Dashboard",
     path: "/",
-    element: () => <div>Test</div>,
-    icon: <Dashboard />,
+    element: <Dashboard />,
+    icon: <Group />,
   },
   {
     id: 2,

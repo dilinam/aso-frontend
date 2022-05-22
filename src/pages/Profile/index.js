@@ -15,6 +15,14 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField";
+import InputPassword from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Button from "@mui/material/Button";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -35,6 +43,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "50%",
+  height: "58%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -102,6 +111,84 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  const [oldPasswordValues, setOldPasswordValues] = React.useState({
+    amount: "",
+    password: "",
+    weight: "",
+    weightRange: "",
+    showPassword: false,
+  });
+
+  const [newPasswordValues, setNewPasswordValues] = React.useState({
+    amount: "",
+    password: "",
+    weight: "",
+    weightRange: "",
+    showPassword: false,
+  });
+
+  const [confirmPasswordValues, setConfirmPasswordValues] = React.useState({
+    amount: "",
+    password: "",
+    weight: "",
+    weightRange: "",
+    showPassword: false,
+  });
+
+  const oldHandleChange = (prop) => (event) => {
+    setOldPasswordValues({
+      ...oldPasswordValues,
+      [prop]: event.target.value,
+    });
+  };
+
+  const oldHandleClickShowPassword = () => {
+    setOldPasswordValues({
+      ...oldPasswordValues,
+      showPassword: !oldPasswordValues.showPassword,
+    });
+  };
+
+  const oldHandleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const newHandleChange = (prop) => (event) => {
+    setNewPasswordValues({
+      ...newPasswordValues,
+      [prop]: event.target.value,
+    });
+  };
+
+  const newHandleClickShowPassword = () => {
+    setNewPasswordValues({
+      ...newPasswordValues,
+      showPassword: !newPasswordValues.showPassword,
+    });
+  };
+
+  const confirmHandleChange = (prop) => (event) => {
+    setConfirmPasswordValues({
+      ...confirmPasswordValues,
+      [prop]: event.target.value,
+    });
+  };
+
+  const confirmHandleClickShowPassword = () => {
+    setConfirmPasswordValues({
+      ...confirmPasswordValues,
+      showPassword: !confirmPasswordValues.showPassword,
+    });
+  };
+
+  const confirmHandleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const newHandleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const imageUploadHandler = (e) => {
     if (e.target.files.length) {
       setUserData({
@@ -123,13 +210,6 @@ const Profile = () => {
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               badgeContent={
-                // <IconButton
-                //   color="primary"
-                //   aria-label="upload picture"
-                //   component="span"
-                // >
-                //   <AddPhotoAlternateTwoToneIcon />
-                // </IconButton>
                 <label htmlFor="icon-button-file">
                   <Input
                     accept="image/*"
@@ -269,6 +349,18 @@ const Profile = () => {
               <Typography>{userData.userEmail}</Typography>
             </Box>
             <Divider variant="middle" />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                m: 2,
+              }}
+            >
+              <Typography>Address</Typography>
+              <Typography>{userData.userAddress}</Typography>
+            </Box>
+            <Divider variant="middle" />
           </Item>
 
           <Item sx={{ width: "75%" }}>
@@ -315,12 +407,164 @@ const Profile = () => {
                   aria-label="basic tabs example"
                   variant="fullWidth"
                 >
-                  <Tab label="Item One" {...a11yProps(0)} />
-                  <Tab label="Item Two" {...a11yProps(1)} />
+                  <Tab label="General Settings" {...a11yProps(0)} />
+                  <Tab label="Security Settings" {...a11yProps(1)} />
                 </Tabs>
               </Box>
-              <TabPanel value={value} index={0}></TabPanel>
-              <TabPanel value={value} index={1}></TabPanel>
+              <TabPanel value={value} index={0}>
+                <TextField
+                  id="first-name"
+                  fullWidth
+                  label="First Name"
+                  variant="standard"
+                  sx={{ m: 1 }}
+                  value={userData.userFirstName}
+                />
+                <TextField
+                  id="last-name"
+                  fullWidth
+                  label="First Name"
+                  variant="standard"
+                  sx={{ m: 1 }}
+                  value={userData.userLastName}
+                />
+                <TextField
+                  id="contact-number"
+                  fullWidth
+                  label="Contact Number"
+                  variant="standard"
+                  sx={{ m: 1 }}
+                  value={userData.userContactNumber}
+                />
+                <TextField
+                  id="email"
+                  fullWidth
+                  label="Email"
+                  variant="standard"
+                  sx={{ m: 1 }}
+                  value={userData.userEmail}
+                />
+                <TextField
+                  id="address"
+                  fullWidth
+                  label="Address"
+                  variant="standard"
+                  sx={{ m: 1 }}
+                  value={userData.userAddress}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    m: 3,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {" "}
+                  <Button variant="outlined" color="error">
+                    Reset
+                  </Button>
+                  <Button color="success" variant="outlined">
+                    Confirm
+                  </Button>
+                </Box>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <FormControl sx={{ m: 2, width: "100%" }} variant="standard">
+                  <InputLabel htmlFor="standard-adornment-password">
+                    Old Password
+                  </InputLabel>
+                  <InputPassword
+                    id="old-password"
+                    type={oldPasswordValues.showPassword ? "text" : "password"}
+                    value={oldPasswordValues.password}
+                    onChange={oldHandleChange("password")}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={oldHandleClickShowPassword}
+                          onMouseDown={oldHandleMouseDownPassword}
+                        >
+                          {oldPasswordValues.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl sx={{ m: 2, width: "100%" }} variant="standard">
+                  <InputLabel htmlFor="standard-adornment-password">
+                    New Password
+                  </InputLabel>
+                  <InputPassword
+                    id="new-password"
+                    type={newPasswordValues.showPassword ? "text" : "password"}
+                    value={newPasswordValues.password}
+                    onChange={newHandleChange("password")}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={newHandleClickShowPassword}
+                          onMouseDown={newHandleMouseDownPassword}
+                        >
+                          {newPasswordValues.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl sx={{ m: 2, width: "100%" }} variant="standard">
+                  <InputLabel htmlFor="standard-adornment-password">
+                    Confirm Password
+                  </InputLabel>
+                  <InputPassword
+                    id="confirm-password"
+                    type={
+                      confirmPasswordValues.showPassword ? "text" : "password"
+                    }
+                    value={confirmPasswordValues.password}
+                    onChange={confirmHandleChange("password")}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={confirmHandleClickShowPassword}
+                          onMouseDown={confirmHandleMouseDownPassword}
+                        >
+                          {confirmPasswordValues.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <Box
+                  sx={{
+                    display: "flex",
+                    m: 3,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {" "}
+                  <Button variant="outlined" color="error">
+                    Reset
+                  </Button>
+                  <Button color="success" variant="outlined">
+                    Confirm
+                  </Button>
+                </Box>
+              </TabPanel>
             </Box>
           </Box>
         </Modal>
