@@ -18,6 +18,7 @@ import NotificationDrawer from "../NotificationDrawer"
 import ROUTES from "../../routes/config"
 import { NavLink, useNavigate } from "react-router-dom"
 import { APP_NAME, APP_VERSION } from "../../utils/constants"
+import { DarkMode, LightMode } from "@mui/icons-material"
 
 const drawerWidth = 240
 
@@ -54,7 +55,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-    backgroundColor: "#FFF",
+    backgroundColor: theme.palette.background.paper,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: "center",
             flexDirection: "column",
             height: 160,
-            backgroundColor: theme.palette.secondary.main,
+            backgroundColor: theme.palette.action.disabledBackground,
         },
         footer: {
             marginTop: "auto",
@@ -124,6 +125,13 @@ function Layout(props) {
         setOpen((prev) => !prev)
     }
 
+    const handleThemeChange = () => {
+        props.setTheme(prev => {
+            localStorage.setItem('THEME', (prev === 'light')? 'dark': 'light');
+            return (prev === 'light')? 'dark': 'light';
+        });
+    }
+
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
@@ -143,6 +151,9 @@ function Layout(props) {
                                 <MenuIcon color="primary" />
                             </IconButton>
                             <div style={{ marginLeft: "auto" }}>
+                                <IconButton onClick={handleThemeChange}>
+                                    {(props.theme === 'light')? (<LightMode />): (<DarkMode />)}
+                                </IconButton>
                                 <NotificationDrawer />
                             </div>
                         </Toolbar>

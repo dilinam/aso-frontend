@@ -46,24 +46,7 @@ const style = {
   p: 4,
 };
 const Tenants = () => {
-  const [tenants, setTenants] = useState([
-    {
-      tenantId: 5,
-      tenantName: "hasitha",
-      description: "-coordinate representations (also known as HSL)",
-      tenantAdminPassword: "hasitha",
-      tenantAdminUserName: "hasithae",
-      status: true,
-    },
-    {
-      tenantId: 6,
-      tenantName: "hasitha",
-      description: "-coordinate representations (also known as HSL)",
-      tenantAdminPassword: "hasitha",
-      tenantAdminUserName: "hasithae",
-      status: true,
-    },
-  ]);
+  const [tenants, setTenants] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [data, setData] = useState({});

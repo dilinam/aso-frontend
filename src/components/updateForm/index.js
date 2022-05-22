@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import { Edit } from "@mui/icons-material";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -32,88 +34,62 @@ const style = {
 const UpdateList = (props) => {
 
   const classes = useStyles();
-  const [data, setData] = useState(
-    props.isCandidate
-      ? {
-          userId: props.Candidate.candidateId,
-          userFirstName: props.Candidate.candidateFirstName,
-          userLastName: props.Candidate.candidateLastName,
-          userNIC: props.Candidate.candidateNIC,
-          userAddress: props.Candidate.candidateAddress,
-          userContactNumber: props.Candidate.candidateContactNumber,
-          userEmail: props.Candidate.candidateEmail,
-          userDOB: props.Candidate.candidateDOB,
-        }
-      : {
-          userId: props.Candidate.examinerId,
-          userFirstName: props.Candidate.examinerFirstName,
-          userLastName: props.Candidate.examinerLastName,
-          userNIC: props.Candidate.examinerNIC,
-          userAddress: props.Candidate.examinerAddress,
-          userContactNumber: props.Candidate.examinerContactNumber,
-          userEmail: props.Candidate.examinerEmail,
-          userDOB: props.Candidate.examinerDOB,
-        }
-  );
+  const [data, setData] = useState({
+    userId: props.data.userId,
+    username: props.data.username,
+    password: props.data.password,
+    firstName: props.data.firstName,
+    lastName: props.data.lastName,
+    nic: props.data.nic,
+    address: props.data.address,
+    contactNo: props.data.contactNo,
+    email: props.data.email,
+    dob: props.data.dob,
+    status: props.data.status,
+    deleted: props.data.deleted,
+    superAdmin: props.data.superAdmin,
+  });
+  const prevdata = { ...data };
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const isCandidate = props.isCandidate;
   const errors = {};
   // form handel
   useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit && isCandidate) {
-      axios
-        .put("http://localhost:8080/updateCandidate/submit", {
-          candidateId: data.userId,
-          candidateFirstName: data.userFirstName,
-          candidateLastName: data.userLastName,
-          candidateNIC: data.userNIC,
-          candidateAddress: data.userAddress,
-          candidateContactNumber: data.userContactNumber,
-          candidateEmail: data.userEmail,
-          candidateDOB: data.userDOB,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      AXIOS_INSTANCE.put(BASE_URL + "/api/users", {
+        userId: data.userId,
+        username: data.username,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        nic: data.nic,
+        address: data.address,
+        contactNo: data.contactNo,
+        email: data.email,
+        dob: data.dob,
+        status: data.status,
+        deleted: data.deleted,
+        superAdmin: data.superAdmin,
+      }).then(
+        (response) => {
+          console.log(response.data);
+          setOpen(false);
+          setIsSubmit(false)
+          // window.location.reload(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
-    if (Object.keys(formErrors).length === 0 && isSubmit && !(isCandidate)) {
-      axios
-        .put("http://localhost:8080/updateExaminer/submit", {
-          examinerId: data.userId,
-          examinerFirstName: data.userFirstName,
-          examinerLastName: data.userLastName,
-          examinerNIC: data.userNIC,
-          examinerAddress: data.userAddress,
-          examinerContactNumber: data.userContactNumber,
-          examinerEmail: data.userEmail,
-          examinerDOB: data.userDOB,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    }
-  });
+  }, [formErrors, isSubmit]);
 
   const handle = (e) => {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value;
     setData(newdata);
-    console.log(newdata);
+    // console.log(newdata);
+    console.log(data);
   };
   const submit = (e) => {
     e.preventDefault();
@@ -125,23 +101,23 @@ const UpdateList = (props) => {
     console.log(open);
   };
   const validateInfo = (values) => {
-    if (!values.userFirstName.trim()) {
-      errors.userFirstName = " First Name required.";
+    if (false) {
+      errors.firstName = " First Name required.";
     }
-    if (!values.userLastName.trim()) {
-      errors.userLastName = " Last Name required.";
+    if (false) {
+      errors.lastName = " Last Name required.";
     }
-    if (!values.userNIC.trim()) {
-      errors.userNIC = " NIC required.";
+    if (false) {
+      errors.nic = " NIC required.";
     }
-    if (!values.userAddress.trim()) {
-      errors.userAddress = " Address required.";
+    if (false) {
+      errors.address = " Address required.";
     }
-    if (!values.userContactNumber.trim()) {
-      errors.userContactNumber = " Contact Number required.";
+    if (false) {
+      errors.contactNo = " Contact Number required.";
     }
-    if (!values.userDOB.trim()) {
-      errors.userDOB = " DOB required.";
+    if (false) {
+      errors.dob = " DOB required.";
     }
     return errors;
   };
@@ -149,9 +125,6 @@ const UpdateList = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = (e) => {
     setOpen(true);
-    const newdata = { ...data, ...e };
-    setData(newdata);
-    console.log(newdata);
   };
   const handleClose = (e) => {
     setOpen(false);
@@ -162,7 +135,7 @@ const UpdateList = (props) => {
    };
   return (
     <div>
-      <Button onClick={() => handleOpen(props.candidate)} endIcon={<Edit />}>
+      <Button onClick={() => handleOpen(props.data)} endIcon={<Edit />}>
         Edit
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
@@ -179,51 +152,51 @@ const UpdateList = (props) => {
                 className={classes.inputfield}
                 fullWidth
                 label="FirstName"
-                error={formErrors.userFirstName == null ? false : true}
+                error={formErrors.firstName == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="FirstName"
-                id="userFirstName"
-                value={data.userFirstName}
+                id="firstName"
+                value={data.firstName}
                 type="text"
-                helperText={formErrors.userFirstName}
+                helperText={formErrors.firstName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Last Name"
-                error={formErrors.userLastName == null ? false : true}
+                error={formErrors.lastName == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Last Name"
-                id="userLastName"
-                value={data.userLastName}
+                id="lastName"
+                value={data.lastName}
                 type="text"
-                helperText={formErrors.userLastName}
+                helperText={formErrors.lastName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="user NIC"
-                error={formErrors.userNIC == null ? false : true}
+                error={formErrors.nic == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="user NIC"
-                id="userNIC"
-                value={data.userNIC}
+                id="nic"
+                value={data.nic}
                 type="text"
-                helperText={formErrors.userNIC}
+                helperText={formErrors.nic}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 label="Address"
                 onChange={(e) => handle(e)}
-                id="userAddress"
-                value={data.userAddress}
+                id="address"
+                value={data.address}
                 placeholder="Address"
                 type="text"
                 multiline
-                error={formErrors.userAddress == null ? false : true}
+                error={formErrors.address == null ? false : true}
                 maxRows={4}
               />
               &nbsp;
@@ -231,39 +204,39 @@ const UpdateList = (props) => {
                 className={classes.inputfield}
                 fullWidth
                 label="Contact Number"
-                error={formErrors.userContactNumber == null ? false : true}
+                error={formErrors.contactNo == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Contact Number"
-                id="userContactNumber"
-                value={data.userContactNumber}
+                id="contactNo"
+                value={data.contactNo}
                 type="text"
-                helperText={formErrors.userContactNumber}
+                helperText={formErrors.contactNo}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Email"
-                error={formErrors.userEmail == null ? false : true}
+                error={formErrors.email== null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Email"
-                id="userEmail"
-                value={data.userEmail}
+                id="email"
+                value={data.email}
                 type="email"
-                helperText={formErrors.userEmail}
+                helperText={formErrors.email}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="DOB"
-                error={formErrors.userDOB == null ? false : true}
+                error={formErrors.dob == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="yyyy/mm/dd"
-                id="userDOB"
-                value={data.userDOB}
+                id="dob"
+                value={data.dob}
                 type="text"
-                helperText={formErrors.userDOB}
+                helperText={formErrors.dob}
               />
             </Box>
             <br></br>

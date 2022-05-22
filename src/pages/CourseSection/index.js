@@ -29,7 +29,7 @@ const CourseSection = (props) => {
 
   const [quiz, setQuiz] = React.useState({
     oder: 0,
-    quizTypeId: quizType,
+    questionType: quizType,
     question: "",
     answers: ["", "", "", ""],
   });
@@ -38,7 +38,7 @@ const CourseSection = (props) => {
 
   // handle what type of question box should create (mcq, essay, stuctured)
   const questionTypeHandler = (event) => {
-    quiz.quizTypeId = event.target.value;
+    quiz.questionType = event.target.value;
     setquizType(event.target.value);
   };
 

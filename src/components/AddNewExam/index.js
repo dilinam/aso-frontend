@@ -53,6 +53,7 @@ const AddNewExam = () => {
           console.log(response);
           setOpen(false);
           setIsSubmit(false);
+          setQuestions([]);
         },
         (error) => {
           console.log(error);

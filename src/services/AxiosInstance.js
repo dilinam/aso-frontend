@@ -1,14 +1,12 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 
-
-const TOKEN = localStorage.getItem("JWT");
-
 const AXIOS_INSTANCE = axios.create({
   baseURL: BASE_URL,
 });
 
 const requestHandler = (request) => {
+  const TOKEN = localStorage.getItem("JWT");
   if (TOKEN && !request.headers.Authorization) {
     request.headers.Authorization = TOKEN ? "Bearer " + TOKEN : null;
   }

@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
@@ -10,11 +9,13 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
+import React, { useState, useEffect } from "react";
 import AddPhotoAlternateTwoToneIcon from "@mui/icons-material/AddPhotoAlternateTwoTone";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+<<<<<<< HEAD
 import TextField from "@mui/material/TextField";
 import InputPassword from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
@@ -23,6 +24,10 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
+=======
+import { BASE_URL } from "../../utils/constants";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+>>>>>>> origin/dilina-dev
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -84,28 +89,26 @@ function a11yProps(index) {
 }
 
 const Profile = () => {
-  const [userData, setUserData] = React.useState({
-    userId: 519220940,
-    userFirstName: "Nirmal",
-    userLastName: "Hansaka",
-    userNIC: "975342612V",
-    userAddress: "534/A, Makola North, Makola",
-    userContactNumber: "0754490704",
-    userEmail: "hansakanirmal123@gmail.com",
-    userDOB: "12/12/1997",
-    userImage: { previweImage: "", uploadImage: "" },
-    courses: [
-      { courseCode: "EEX4465", courseTitle: "Data Stucture and Algorithems" },
-      { courseCode: "EEX4337", courseTitle: "Data Science" },
-      { courseCode: "EEI5563", courseTitle: "Operating Systems" },
-    ],
-  });
+  const [userData, setUserData] = useState({});
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(0);
+  const [data, setData] = useState([{}]);
 
-  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    AXIOS_INSTANCE.get(BASE_URL + "/api/users/UserCourse/1").then(
+      (response) => {
+        console.log(response.data);
+        setUserData(response.data.tenantUser.user);
+        setData(...data,...response.data.course);
+      }
+    );
+  },[]);
+
+  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [value, setValue] = React.useState(0);
+  
 
   const tabHandleChange = (event, newValue) => {
     setValue(newValue);
@@ -190,15 +193,15 @@ const Profile = () => {
   };
 
   const imageUploadHandler = (e) => {
-    if (e.target.files.length) {
-      setUserData({
-        ...userData,
-        userImage: {
-          previweImage: URL.createObjectURL(e.target.files[0]),
-          uploadImage: e.target.files[0],
-        },
-      });
-    }
+    // if (e.target.files.length) {
+    //   setUserData({
+    //     ...userData,
+    //     .image: {
+    //       previweImage: URL.createObjectURL(e.target.files[0]),
+    //       uploadImage: e.target.files[0],
+    //     },
+    //   });
+    // }
   };
 
   return (
@@ -228,15 +231,15 @@ const Profile = () => {
               }
             >
               <Avatar
-                alt={userData.userFirstName}
-                src={userData.userImage.previweImage}
+                alt={userData.firstName}
+                // src={userData..image.previweImage}
                 sx={{ width: 95, height: 95 }}
               />
             </Badge>
             <br />
 
             <Typography variant="h6" gutterBottom component="div">
-              {userData.userFirstName + " " + userData.userLastName}
+              {userData.firstName + " " + userData.lastName}
             </Typography>
           </Item>
           <Item sx={{ width: "75%" }}>
@@ -282,7 +285,7 @@ const Profile = () => {
               }}
             >
               <Typography>First Name</Typography>
-              <Typography>{userData.userFirstName}</Typography>
+              <Typography>{userData.firstName}</Typography>
             </Box>
             <Divider variant="middle" />
 
@@ -295,7 +298,7 @@ const Profile = () => {
               }}
             >
               <Typography>Last Name</Typography>
-              <Typography>{userData.userLastName}</Typography>
+              <Typography>{userData.lastName}</Typography>
             </Box>
             <Divider variant="middle" />
 
@@ -308,7 +311,7 @@ const Profile = () => {
               }}
             >
               <Typography>Date of birth</Typography>
-              <Typography>{userData.userDOB}</Typography>
+              <Typography>{userData.dob}</Typography>
             </Box>
             <Divider variant="middle" />
             <Box
@@ -320,7 +323,7 @@ const Profile = () => {
               }}
             >
               <Typography>NIC</Typography>
-              <Typography>{userData.userNIC}</Typography>
+              <Typography>{userData.nic}</Typography>
             </Box>
             <Divider variant="middle" />
 
@@ -333,7 +336,7 @@ const Profile = () => {
               }}
             >
               <Typography>Contact Number</Typography>
-              <Typography>{userData.userContactNumber}</Typography>
+              <Typography>{userData.contactNo}</Typography>
             </Box>
             <Divider variant="middle" />
 
@@ -346,7 +349,7 @@ const Profile = () => {
               }}
             >
               <Typography>E-Mail</Typography>
-              <Typography>{userData.userEmail}</Typography>
+              <Typography>{userData.email}</Typography>
             </Box>
             <Divider variant="middle" />
             <Box
@@ -370,8 +373,7 @@ const Profile = () => {
               </Typography>
             </Box>
             <Divider />
-            {userData.courses.map((course) => {
-              return (
+            {data.map((course) =>(
                 <>
                   <Box
                     sx={{
@@ -382,12 +384,12 @@ const Profile = () => {
                     }}
                   >
                     <Typography>{course.courseCode}</Typography>
-                    <Typography>{course.courseTitle}</Typography>
+                    <Typography>{course.courseName}</Typography>
                   </Box>
                   <Divider variant="middle" />
                 </>
-              );
-            })}
+              ))
+            }
           </Item>
         </Stack>
       </Box>

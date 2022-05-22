@@ -3,9 +3,13 @@ import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import Modal from "@mui/material/Modal";
-import {PersonAdd } from "@mui/icons-material";
+import { PersonAdd } from "@mui/icons-material";
+import AXIOS_INSTANCE from "../../services/AxiosInstance";
+import { BASE_URL } from "../../utils/constants";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import moment from "moment";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -26,73 +30,44 @@ const style = {
   boxShadow: 24,
   p: 4,
   overflowY: "scroll",
+  height: 500,
+  maxHeight: "100%",
 };
 
 const AddNewUser = (props) => {
+  const options = ["TENANTADMIN", "EXAMINER", "CANDIDATE"];
   const classes = useStyles();
-  const [data, setData] = useState(
- {
-          userId: "",
-          userFirstName: "",
-          userLastName: "",
-          userNIC: "",
-          userAddress: "",
-          userContactNumber: "",
-          userEmail: "",
-          userDOB: "",
-        }
-  );
+  const [data, setData] = useState();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const isCandidate = props.isCandidate;
+  const [role, setRole] = useState();
+
   const errors = {};
   // form handel
   useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit && isCandidate) {
-      axios
-        .post("http://localhost:8080/Candidate/submit", {
-          candidateFirstName: data.userFirstName,
-          candidateLastName: data.userLastName,
-          candidateNIC: data.userNIC,
-          candidateAddress: data.userAddress,
-          candidateContactNumber: data.userContactNumber,
-          candidateEmail: data.userEmail,
-          candidateDOB: data.userDOB,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      AXIOS_INSTANCE.post(BASE_URL + "/api/users/" + role, {
+        username: data.firstName + data.lastName,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        nic: data.nic,
+        address: data.address,
+        contactNo: data.contactNo,
+        email: data.email,
+        dob: moment(data.dob, "YYYY/MM/DD").unix(),
+      }).then(
+        (response) => {
+          console.log(response);
+          setOpen(false);
+          setIsSubmit(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
-    if (Object.keys(formErrors).length === 0 && isSubmit && !isCandidate) {
-      axios
-        .post("http://localhost:8080/Examiner/submit", {
-          examinerFirstName: data.userFirstName,
-          examinerLastName: data.userLastName,
-          examinerNIC: data.userNIC,
-          examinerAddress: data.userAddress,
-          examinerContactNumber: data.userContactNumber,
-          examinerEmail: data.userEmail,
-          examinerDOB: data.userDOB,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            setOpen(false);
-            setIsSubmit(false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    }
-  });
+  }, [formErrors, isSubmit]);
 
   const handle = (e) => {
     const newdata = { ...data };
@@ -110,24 +85,24 @@ const AddNewUser = (props) => {
     console.log(open);
   };
   const validateInfo = (values) => {
-    if (!values.userFirstName.trim()) {
+    if (false) {
       errors.userFirstName = " First Name required.";
     }
-    if (!values.userLastName.trim()) {
-      errors.userLastName = " Last Name required.";
-    }
-    if (!values.userNIC.trim()) {
-      errors.userNIC = " NIC required.";
-    }
-    if (!values.userAddress.trim()) {
-      errors.userAddress = " Address required.";
-    }
-    if (!values.userContactNumber.trim()) {
-      errors.userContactNumber = " Contact Number required.";
-    }
-    if (!values.userDOB.trim()) {
-      errors.userDOB = " DOB required.";
-    }
+    // if (!values.userLastName.trim()) {
+    //   errors.userLastName = " Last Name required.";
+    // }
+    // if (!values.userNIC.trim()) {
+    //   errors.userNIC = " NIC required.";
+    // }
+    // if (!values.userAddress.trim()) {
+    //   errors.userAddress = " Address required.";
+    // }
+    // if (!values.userContactNumber.trim()) {
+    //   errors.userContactNumber = " Contact Number required.";
+    // }
+    // if (!values.userDOB.trim()) {
+    //   errors.userDOB = " DOB required.";
+    // }
     return errors;
   };
   //modal options
@@ -142,6 +117,9 @@ const AddNewUser = (props) => {
     e.preventDefault();
     setOpen(false);
   };
+  const selected = (e) => {
+    setRole(e.value.toLowerCase());
+  };
   return (
     <div>
       <Button onClick={() => handleOpen()} startIcon={<PersonAdd />}>
@@ -149,7 +127,7 @@ const AddNewUser = (props) => {
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
         <Box sx={style}>
-          <form key={data.userId}>
+          <form>
             <Box
               sx={{
                 width: 500,
@@ -160,88 +138,108 @@ const AddNewUser = (props) => {
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="FirstName"
-                error={formErrors.userFirstName == null ? false : true}
+                label="First Name"
+                error={formErrors.firstName == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="FirstName"
-                id="userFirstName"
+                placeholder="First Name"
+                id="firstName"
                 type="text"
-                helperText={formErrors.userFirstName}
+                helperText={formErrors.firstName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Last Name"
-                error={formErrors.userLastName == null ? false : true}
+                error={formErrors.lastName == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Last Name"
-                id="userLastName"
+                id="lastName"
                 type="text"
-                helperText={formErrors.userLastName}
+                helperText={formErrors.lastName}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
-                label="user NIC"
-                error={formErrors.userNIC == null ? false : true}
+                label="Password"
+                error={formErrors.password == null ? false : true}
                 onChange={(e) => handle(e)}
-                placeholder="user NIC"
-                id="userNIC"
+                placeholder="Password"
+                id="password"
                 type="text"
-                helperText={formErrors.userNIC}
+                helperText={formErrors.password}
+              />
+              &nbsp;
+              <TextField
+                className={classes.inputfield}
+                fullWidth
+                label="NIC"
+                error={formErrors.nic == null ? false : true}
+                onChange={(e) => handle(e)}
+                placeholder="ex : 991xxxxxxV"
+                id="nic"
+                type="text"
+                helperText={formErrors.nic}
               />
               &nbsp; &nbsp;
               <TextField
                 className={classes.inputfield}
                 label="Address"
                 onChange={(e) => handle(e)}
-                id="userAddress"
+                id="address"
                 placeholder="Address"
                 type="text"
                 multiline
-                error={formErrors.userAddress == null ? false : true}
+                error={formErrors.address == null ? false : true}
                 maxRows={4}
+                helperText={formErrors.address}
               />
               &nbsp; &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Contact Number"
-                error={formErrors.userContactNumber == null ? false : true}
+                error={formErrors.contactNo == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Contact Number"
-                id="userContactNumber"
+                id="contactNo"
                 type="text"
-                helperText={formErrors.userContactNumber}
+                helperText={formErrors.contactNo}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="Email"
-                error={formErrors.userEmail == null ? false : true}
+                error={formErrors.email == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Email"
-                id="userEmail"
+                id="email"
                 type="email"
-                helperText={formErrors.userEmail}
+                helperText={formErrors.email}
               />
               &nbsp;
               <TextField
                 className={classes.inputfield}
                 fullWidth
                 label="DOB"
-                error={formErrors.userDOB == null ? false : true}
+                error={formErrors.dob == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="yyyy/mm/dd"
-                id="userDOB"
+                id="dob"
                 type="text"
-                helperText={formErrors.userDOB}
+                helperText={formErrors.dob}
               />
               &nbsp;
             </Box>
+            <Dropdown
+              options={options}
+              onChange={(e) => selected(e)}
+              value={options[0]}
+              placeholder="Select an option"
+            />
+            <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>
               Register
             </Button>

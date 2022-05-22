@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
@@ -7,7 +8,9 @@ import AddNewExam from "../../components/AddNewExam";
 import UpdateExam from "../../components/UpdateExam";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import { BASE_URL } from "../../utils/constants";
+import QuizPage from "../QuizPage";
 const Exams = () => {
+  const navigate = useNavigate();
   const [examData, setExamData] = useState([
     {
       examID: 123,
@@ -74,11 +77,13 @@ const Exams = () => {
               <Button
                 sx={{ width: "15em" }}
                 variant="contained"
-                href="#contained-buttons"
+                onClick={() =>
+                  navigate("/QuizPage", { state: {exam} })
+                }
               >
                 Start
               </Button>
-              <UpdateExam />
+              <UpdateExam exam={exam} />
             </Box>
           </Paper>
         </Grid>
