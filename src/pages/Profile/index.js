@@ -15,19 +15,8 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-<<<<<<< HEAD
-import TextField from "@mui/material/TextField";
-import InputPassword from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Button from "@mui/material/Button";
-=======
 import { BASE_URL } from "../../utils/constants";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
->>>>>>> origin/dilina-dev
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -99,16 +88,13 @@ const Profile = () => {
       (response) => {
         console.log(response.data);
         setUserData(response.data.tenantUser.user);
-        setData(...data,...response.data.course);
+        setData(...data, ...response.data.course);
       }
     );
-  },[]);
+  }, []);
 
-  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  
 
   const tabHandleChange = (event, newValue) => {
     setValue(newValue);
@@ -373,23 +359,22 @@ const Profile = () => {
               </Typography>
             </Box>
             <Divider />
-            {data.map((course) =>(
-                <>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
-                      alignItems: "center",
-                      m: 2,
-                    }}
-                  >
-                    <Typography>{course.courseCode}</Typography>
-                    <Typography>{course.courseName}</Typography>
-                  </Box>
-                  <Divider variant="middle" />
-                </>
-              ))
-            }
+            {data.map((course) => (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    m: 2,
+                  }}
+                >
+                  <Typography>{course.courseCode}</Typography>
+                  <Typography>{course.courseName}</Typography>
+                </Box>
+                <Divider variant="middle" />
+              </>
+            ))}
           </Item>
         </Stack>
       </Box>
