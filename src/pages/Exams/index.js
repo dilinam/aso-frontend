@@ -11,38 +11,7 @@ import { BASE_URL } from "../../utils/constants";
 import QuizPage from "../QuizPage";
 const Exams = () => {
   const navigate = useNavigate();
-  const [examData, setExamData] = useState([
-    {
-      examID: 123,
-      decription:
-        "As far as I know, you can only override classes. for styling pseudos you have to select them like this",
-      name: "fuck you bitches",
-      dateTime: "Tue Mar 29 2022 13:20:42 GMT+0530 (India Standard Time)",
-      duration: "2h 30 min",
-      Status: true,
-      deleted: false,
-    },
-    {
-      examID: 1234,
-      decription:
-        "As far as I know, you can only override classes. for styling pseudos you have to select them like this",
-      name: "fuck you bitches",
-      dateTime: "Tue Mar 29 2022 13:20:42 GMT+0530 (India Standard Time)",
-      duration: "2h 30 min",
-      Status: true,
-      deleted: false,
-    },
-    {
-      examID: 12345,
-      decription:
-        "As far as I know, you can only override classes. for styling pseudos you have to select them like this",
-      name: "fuck you bitches",
-      dateTime: "Tue Mar 29 2022 13:20:42 GMT+0530 (India Standard Time)",
-      duration: "2h 30 min",
-      Status: true,
-      deleted: false,
-    },
-  ]);
+  const [examData, setExamData] = useState([]);
   useEffect(() => {
     AXIOS_INSTANCE.get(BASE_URL + "/api/exam").then((response) => {
       console.log(response.data);
