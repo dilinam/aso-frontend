@@ -5,6 +5,7 @@ import Layout from "./components/Layout"
 import ROUTES from "./routes/config"
 import Login from "./pages/Login"
 import { useEffect, useState } from "react"
+import { UserProvider } from "./contexts/UserContext"
 
 function App() {
 
@@ -22,13 +23,18 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path={'/login'} element={<Login />} />
-                    {ROUTES.map((route, i) => (
-                        <Route
-                            path={route.path}
-                            element={<Layout theme={theme} setTheme={setTheme} isLayoutHide={route.hideLayout}>{route.element}</Layout>}
-                            key={"route" + route.id}
-                        />
-                    ))}
+                        {ROUTES.map((route, i) => (
+                            <Route
+                                path={route.path}
+                                element={
+                                    <UserProvider>
+                                        <Layout theme={theme} setTheme={setTheme} isLayoutHide={route.hideLayout}>
+                                            {route.element}
+                                        </Layout>
+                                    </UserProvider>}
+                                key={"route" + route.id}
+                            />
+                        ))}
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

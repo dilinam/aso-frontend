@@ -21,6 +21,7 @@ const responseHandler = (response) => {
 const errorHandler = async (error) => {
   if (error?.response?.status == 403) {
     localStorage.removeItem("JWT");
+    window.location.href = "/login";
   }
   return Promise.reject(error);
 };

@@ -17,8 +17,10 @@ import { makeStyles } from "@mui/styles"
 import NotificationDrawer from "../NotificationDrawer"
 import ROUTES from "../../routes/config"
 import { NavLink, useNavigate } from "react-router-dom"
-import { APP_NAME, APP_VERSION } from "../../utils/constants"
+import { APP_NAME, APP_VERSION, BASE_URL } from "../../utils/constants"
 import { DarkMode, LightMode } from "@mui/icons-material"
+import UserContext from "../../contexts/UserContext"
+import AXIOS_INSTANCE from "../../services/AxiosInstance"
 
 const drawerWidth = 240
 
@@ -109,17 +111,25 @@ const useStyles = makeStyles((theme) => {
 })
 
 function Layout(props) {
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(true);
+    const {user, setUser} = React.useContext(UserContext);
 
     const navigate = useNavigate();
+    const classes = useStyles()
     
     React.useEffect(() => {
         if(!localStorage.getItem('JWT')){
             navigate('/login')
         }
+        if(!user){
+            // get logged user's details and store in context 
+            AXIOS_INSTANCE.get(BASE_URL + '/api/auth/getLoggedUser').then(response => {
+                if(response.data){
+                    setUser(response.data)
+                }
+            })
+        }
     }, [])
-
-    const classes = useStyles()
 
     const handleDrawerOpen = () => {
         setOpen((prev) => !prev)
