@@ -9,6 +9,8 @@ import { styled } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import { BASE_URL } from "../../utils/constants";
+import { Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 const style = {
   position: "absolute",
@@ -99,7 +101,9 @@ const cancel = (e) => {
 };
   return (
     <>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Fab size="medium" color="primary" aria-label="add">
+        <AddIcon onClick={handleOpen} />
+      </Fab>
       <Modal
         open={open}
         onClose={handleClose}

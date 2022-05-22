@@ -6,7 +6,6 @@ import QuizPage from "../pages/QuizPage";
 import CourseSection from "../pages/CourseSection";
 import QuizIcon from "@mui/icons-material/Quiz";
 import SecondQuizBox from "../components/SecondQuizBox";
-import AddCourse from "../components/AddCourse";
 import TenantLogin from "../pages/TenantLogin";
 import Login from "../pages/Login";
 import Exams from "../pages/Exams";
@@ -51,13 +50,7 @@ const ROUTES = [
     element: <SecondQuizBox />,
     icon: <QuizIcon />,
   },
-  {
-    id: 6,
-    label: "AddCourse",
-    path: "/addCourse",
-    element: <AddCourse />,
-    icon: <QuizIcon />,
-  },
+
   {
     id: 7,
     label: "TenantLogin",
