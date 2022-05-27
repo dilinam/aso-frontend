@@ -13,6 +13,7 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import CourseSection from "../../pages/CourseSection";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import { BASE_URL } from "../../utils/constants";
+import AddCandidateToExam from "../../components/AddCandidateToExam";
 
 const useStyles = makeStyles({
   inputfield: {
@@ -202,6 +203,7 @@ const AddNewExam = () => {
                 })
               }
             />
+            <AddCandidateToExam/>
             <br></br>
             <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>

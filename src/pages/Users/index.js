@@ -71,7 +71,6 @@ function Users() {
     setOpen(false);
   };
   // form handel
-  
 
   const handle = (e) => {
     const newdata = { ...data };
@@ -108,10 +107,7 @@ function Users() {
   };
   useEffect(() => {
     if (isDeleted) {
-      AXIOS_INSTANCE.delete(
-        BASE_URL +"/api/users/"+deleteId ,
-        {}
-      ).then(
+      AXIOS_INSTANCE.delete(BASE_URL + "/api/users/" + deleteId, {}).then(
         (response) => {
           console.log(response);
           //   window.location.reload(false);
@@ -123,7 +119,7 @@ function Users() {
     }
   });
   //check box
- 
+
   const cancel = (e) => {
     e.preventDefault();
     setOpen(false);
