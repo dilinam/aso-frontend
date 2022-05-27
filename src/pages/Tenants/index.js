@@ -127,13 +127,11 @@ const Tenants = () => {
   // delete funtion
   const [isDeleted, setIsDeleted] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
-  const deleteTenant = (e) => {
-    setDeleteId(e.tenantId);
+  const deleteTenant = (id) => {
+    setDeleteId(id);
     setIsDeleted(true);
-    const index = tenants.findIndex((x) => x.tenantId === deleteId);
-    console.log(index);
-    const newtent = tenants.slice(0, index);
-    setTenants(newtent);
+    const newtenants = tenants.filter((x) => x.tenantId !== id);
+    setTenants(newtenants);
   };
   useEffect(() => {
     if(isDeleted){
@@ -186,7 +184,9 @@ const Tenants = () => {
               <TableRow key={tenant.tenantId}>
                 <TableCell align="right">{tenant.tenantId}</TableCell>
                 <TableCell align="right">{tenant.tenantName}</TableCell>
-                <TableCell align="right">{tenant.tenantAdminUserName}</TableCell>
+                <TableCell align="right">
+                  {tenant.tenantAdminUserName}
+                </TableCell>
                 <TableCell align="right">{tenant.description}</TableCell>
                 <TableCell align="right">{tenant.password}</TableCell>
                 <TableCell align="right">{tenant.status.toString()}</TableCell>
@@ -302,7 +302,7 @@ const Tenants = () => {
                     variant="outlined"
                     color="error"
                     size="small"
-                    onClick={() => deleteTenant(tenant)}
+                    onClick={() => deleteTenant(tenant.tenantId)}
                     endIcon={<DeleteIcon />}
                   >
                     Delete

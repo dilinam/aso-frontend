@@ -133,6 +133,16 @@ const UpdateList = (props) => {
      e.preventDefault();
      setOpen(false);
    };
+  const [checked, setChecked] = useState();
+  const ischecked = (e) => {
+    const newdata = { ...data };
+    setChecked(e.target.value === "true" ? true : false);
+    newdata.status = !checked;
+    setData(newdata);
+    const index =data.findIndex((x) => x.userId === data.userId);
+    data[index].status = !checked;
+    console.log(data[index].status);
+  };
   return (
     <div>
       <Button onClick={() => handleOpen(props.data)} endIcon={<Edit />}>
@@ -217,7 +227,7 @@ const UpdateList = (props) => {
                 className={classes.inputfield}
                 fullWidth
                 label="Email"
-                error={formErrors.email== null ? false : true}
+                error={formErrors.email == null ? false : true}
                 onChange={(e) => handle(e)}
                 placeholder="Email"
                 id="email"
@@ -238,6 +248,16 @@ const UpdateList = (props) => {
                 type="text"
                 helperText={formErrors.dob}
               />
+              &nbsp;
+              <input
+                onChange={(e) => ischecked(e)}
+                value={data.status}
+                type="checkbox"
+                id="status"
+                name="status"
+                checked={data.status ? true : false}
+              ></input>
+              <label>Status</label>
             </Box>
             <br></br>
             <Button variant="outlined" type="submit" onClick={(e) => submit(e)}>

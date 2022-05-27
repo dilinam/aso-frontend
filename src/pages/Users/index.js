@@ -8,9 +8,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TextField from "@mui/material/TextField";
 import Paper from "@material-ui/core/Paper";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import { BASE_URL } from "../../utils/constants";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
@@ -100,13 +100,11 @@ function Users() {
   // delete funtion
   const [isDeleted, setIsDeleted] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
-  const deleteUser = (e) => {
-    setDeleteId(e.userId);
+  const deleteUser = (id) => {
+    setDeleteId(id);
     setIsDeleted(true);
-    const index = users.findIndex((x) => x.userId === deleteId);
-    console.log(index);
-    const newtent = users.slice(0, index);
-    setUsers(newtent);
+    const newtenants = users.filter((x) => x.userId === id);
+    setUsers(newtenants);
   };
   useEffect(() => {
     if (isDeleted) {
@@ -125,23 +123,14 @@ function Users() {
     }
   });
   //check box
-  const [checked, setChecked] = useState();
-  const ischecked = (e) => {
-    const newdata = { ...data };
-    setChecked(e.target.value === "true" ? true : false);
-    newdata.status = !checked;
-    setData(newdata);
-    const index = users.findIndex((x) => x.userId === data.userId);
-    users[index].status = !checked;
-    console.log(users[index].status);
-  };
+ 
   const cancel = (e) => {
     e.preventDefault();
     setOpen(false);
   };
   return (
     <div>
-      <AddNewUser/>
+      <AddNewUser />
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -176,48 +165,14 @@ function Users() {
                   {user.superAdmin.toString()}
                 </TableCell>
                 <TableCell align="right">
-                  <UpdateList data = {user}/>
-                  {/* <Button onClick={() => handleOpen(user)}>Edit</Button>
-                  <Modal open={open} onClose={handleClose}>
-                    <Box sx={style}>
-                      <h1>Edit User</h1>
-                      <form key={user.userId}>
-                        <TextField
-                          className={classes.inputfield}
-                          fullWidth
-                          label="UserName"
-                          error={formErrors.username == null ? false : true}
-                          onChange={(e) => handle(e)}
-                          id="username"
-                          value={data.username}
-                          type="text"
-                          helperText={formErrors.username}
-                        />
-                        &nbsp;
-                        <input
-                          onChange={(e) => ischecked(e)}
-                          value={data.status}
-                          type="checkbox"
-                          id="status"
-                          name="status"
-                          checked={data.status ? true : false}
-                        ></input>
-                        <label>Status</label>
-                        <br></br>
-                        <Button type="submit" onClick={(e) => submit(e)}>
-                          Update
-                        </Button>
-                        <Button type="submit" onClick={(e) => cancel(e)}>
-                          Cancel
-                        </Button>
-                      </form>
-                    </Box>
-                  </Modal> */}
+                  <UpdateList data={user} />
                   &nbsp;
                   <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => deleteUser(user)}
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    endIcon={<DeleteIcon />}
+                    onClick={() => deleteUser(user.userId)}
                   >
                     Delete
                   </Button>

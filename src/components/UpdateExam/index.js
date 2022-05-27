@@ -123,11 +123,17 @@ const UpdateExam = (props) => {
   React.useEffect(() => {
     console.log(questions);
   }, [questions]);
+
   return (
     <div>
-      <Button onClick={() => handleOpen()} endIcon={<Settings />} color="error">
+      <Button
+        onClick={() => handleOpen()}
+        endIcon={<Settings />}
+        color="success"
+      >
         change options
       </Button>
+      
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
         <Box sx={style}>
           <form>

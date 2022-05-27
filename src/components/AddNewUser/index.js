@@ -120,6 +120,7 @@ const AddNewUser = (props) => {
   const selected = (e) => {
     setRole(e.value.toLowerCase());
   };
+  
   return (
     <div>
       <Button onClick={() => handleOpen()} startIcon={<PersonAdd />}>
@@ -232,6 +233,7 @@ const AddNewUser = (props) => {
                 helperText={formErrors.dob}
               />
               &nbsp;
+              
             </Box>
             <Dropdown
               options={options}

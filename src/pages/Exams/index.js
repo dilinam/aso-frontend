@@ -8,20 +8,44 @@ import AddNewExam from "../../components/AddNewExam";
 import UpdateExam from "../../components/UpdateExam";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import { BASE_URL } from "../../utils/constants";
+import DeleteIcon from "@mui/icons-material/Delete";
 import QuizPage from "../QuizPage";
 const Exams = () => {
   const navigate = useNavigate();
   const [examData, setExamData] = useState([]);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [deleteId, setDeleteId] = useState();
   useEffect(() => {
-    AXIOS_INSTANCE.get(BASE_URL + "/api/exam").then((response) => {
+    AXIOS_INSTANCE.get(BASE_URL +"/api/exam").then((response) => {
       console.log(response.data);
       setExamData(response.data);
     });
   }, []);
+  const deleteExam = (id) => {
+    setIsDeleted(true);
+    setDeleteId(id);
+    console.log(id);
+    const newExamData = examData.filter((x) => x.examId !== id);
+    console.log(newExamData);
+    setExamData(newExamData);
+  };
+  useEffect(() => {
+    if (isDeleted) {
+      AXIOS_INSTANCE.delete(BASE_URL + `/api/exam/${deleteId}`).then(
+        (response) => {
+          console.log(response);
+          setDeleteId();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  }, [isDeleted]);
   return (
     <Grid container spacing={5}>
       {examData.map((exam) => (
-        <Grid item key={exam.examID} alignItems="center">
+        <Grid item key={exam.examId} alignItems="center">
           <Paper
             sx={{
               height: "20em",
@@ -46,13 +70,18 @@ const Exams = () => {
               <Button
                 sx={{ width: "15em" }}
                 variant="contained"
-                onClick={() =>
-                  navigate("/QuizPage", { state: {exam} })
-                }
+                onClick={() => navigate("/QuizPage", { state: { exam } })}
               >
                 Start
               </Button>
               <UpdateExam exam={exam} />
+              <Button
+                onClick={() => deleteExam(exam.examId)}
+                endIcon={<DeleteIcon/>}
+                color="error"
+              >
+                Drop this exam
+              </Button>
             </Box>
           </Paper>
         </Grid>
