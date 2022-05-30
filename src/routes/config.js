@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import Exams from "../pages/Exams";
 import Tenants from "../pages/Tenants";
 import Profile from "../pages/Profile";
+import Marks from "../components/Marks";
 
 const ROUTES = [
   {
@@ -77,6 +78,13 @@ const ROUTES = [
     label: "Profile",
     path: "/profile",
     element: <Profile />,
+    icon: <QuizIcon />,
+  },
+  {
+    id: 12,
+    label: "Marks",
+    path: "/marks",
+    element: <Marks/>,
     icon: <QuizIcon />,
   },
 ];

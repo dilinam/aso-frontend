@@ -56,30 +56,46 @@ function AddCandidateToExam() {
   const isChecked = (user) => {
     if (examUserList.includes(user.userId)){
         const index = examUserList.indexOf(user.userId);
-        console.log(index);
         examUserList.splice(index,1);
     } else{
         examUserList.push(user.userId);
     }
     console.log(examUserList);
   };
+  const forAll = (users) => {
+      {
+        users.map((user) => {if (examUserList.includes(user.userId)){
+            examUserList.push(user.userId)
+        }});
+      }
+        
+  };
   return (
     <div>
       <Button variant="outlined" onClick={handleOpen}>
-        Asign candidates 
+        Asign candidates
       </Button>
       <Modal open={open} onClose={handleClose} sx={{ overflowY: "scroll" }}>
         <Box sx={style}>
           <Box
             sx={{
-            //   width: 500,
+              //   width: 500,
               maxWidth: "100%",
             }}
           >
+            Asign Candidate To exam
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    <TableCell align="right">
+                      <input
+                        onChange={() => forAll(users)}
+                        type="checkbox"
+                        id="status"
+                        name="status"
+                      ></input>
+                    </TableCell>
                     <TableCell align="right">userId</TableCell>
                     <TableCell align="right">username</TableCell>
                     <TableCell align="right">nic</TableCell>
@@ -89,18 +105,19 @@ function AddCandidateToExam() {
                 <TableBody>
                   {users.map((user) => (
                     <TableRow key={user.userId}>
-                      <TableCell align="right">{user.userId}</TableCell>
-                      <TableCell align="right">{user.username}</TableCell>
-                      <TableCell align="right">{user.nic}</TableCell>
-                      <TableCell align="right">{user.email}</TableCell>
                       <TableCell align="right">
                         <input
                           onChange={() => isChecked(user)}
                           type="checkbox"
                           id="status"
                           name="status"
+                          checked={examUserList.includes(user.userId)}
                         ></input>
                       </TableCell>
+                      <TableCell align="right">{user.userId}</TableCell>
+                      <TableCell align="right">{user.username}</TableCell>
+                      <TableCell align="right">{user.nic}</TableCell>
+                      <TableCell align="right">{user.email}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

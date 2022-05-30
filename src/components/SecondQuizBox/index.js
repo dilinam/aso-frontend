@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+
 const SecondQuizBox = ({ quizNumber, question }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

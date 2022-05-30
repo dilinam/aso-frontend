@@ -80,14 +80,21 @@ const Profile = () => {
   const [userData, setUserData] = useState({});
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
-  const [data, setData] = useState([{}]);
+  const [courseData, setcourseData] = useState([]);
 
   useEffect(() => {
     AXIOS_INSTANCE.get(BASE_URL + "/api/users/UserCourse/1").then(
       (response) => {
         console.log(response.data);
         setUserData(response.data.tenantUser.user);
-        setData(...data,...response.data.course);
+        // setcourseData(...response.data.course);
+        console.log(typeof response.data.course);
+        setcourseData((prev)=>{
+              const x = [...prev, response.data.course];
+               console.log(x);
+              return x
+        });
+       
       }
     );
   },[]);
@@ -95,8 +102,6 @@ const Profile = () => {
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  
 
   const tabHandleChange = (event, newValue) => {
     setValue(newValue);
@@ -278,23 +283,23 @@ const Profile = () => {
               </Typography>
             </Box>
             <Divider />
-            {data.map((course) =>(
-                <>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
-                      alignItems: "center",
-                      m: 2,
-                    }}
-                  >
-                    <Typography>{course.courseCode}</Typography>
-                    <Typography>{course.courseName}</Typography>
-                  </Box>
-                  <Divider variant="middle" />
-                </>
-              ))
-            }
+            {courseData.map((course) => 
+            (<>
+              <Box
+                key={course.courseId}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                  m: 2,
+                }}
+              >
+                <Typography>{course.courseCode}</Typography>
+                <Typography>{course.courseName}</Typography>
+              </Box>
+              <Divider variant="middle" />
+            </>)
+             )}
           </Item>
         </Stack>
       </Box>
