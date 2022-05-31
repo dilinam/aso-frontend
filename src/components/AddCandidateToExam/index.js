@@ -16,6 +16,8 @@ import { BASE_URL } from "../../utils/constants";
 import AXIOS_INSTANCE from "../../services/AxiosInstance";
 import AddNewUser from "../../components/AddNewUser";
 import UpdateList from "../../components/updateForm";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const useStyles = makeStyles({
   table: {
@@ -36,7 +38,8 @@ const style = {
 
 function AddCandidateToExam() {
   const [users, setUsers] = useState([]);
-  const examUserList = [];
+  const [checked, setChecked] = React.useState(false);
+  let examUserList = [];
   const [isSubmit, setIsSubmit] = useState(false);
   const classes = useStyles();
   useEffect(() => {
@@ -57,19 +60,54 @@ function AddCandidateToExam() {
     if (examUserList.includes(user.userId)){
         const index = examUserList.indexOf(user.userId);
         examUserList.splice(index,1);
+        setChecked(false);
     } else{
         examUserList.push(user.userId);
+        setChecked(false);
     }
     console.log(examUserList);
   };
-  const forAll = (users) => {
+  const handleChange1 = (event) => {
+    console.log(event.target.checked);
+    if (!event.target.checked){
+      setChecked(false);
+      examUserList = [];
+    }else{
+      setChecked(true);
       {
-        users.map((user) => {if (examUserList.includes(user.userId)){
-            examUserList.push(user.userId)
-        }});
+        users.map((user) => {
+          if (!examUserList.includes(user.userId)) {
+            examUserList.push(user.userId);
+          }
+        });
       }
-        
+    }
+    console.log(examUserList);
+      
   };
+  const children = (user) => (
+    <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
+      <FormControlLabel
+        label="Child 1"
+        control={
+          <Checkbox
+            defaultUnChecked
+            checked={() => (checked || examUserList.includes(user.userId))}
+            onChange={() => isChecked(user)}
+          />
+        }
+      />
+    </Box>
+  );
+  const forAll = (
+    <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
+      <FormControlLabel
+        label="Parent"
+        checked={checked}
+        control={<Checkbox onChange={handleChange1} />}
+      />
+    </Box>
+  );
   return (
     <div>
       <Button variant="outlined" onClick={handleOpen}>
@@ -89,12 +127,7 @@ function AddCandidateToExam() {
                 <TableHead>
                   <TableRow>
                     <TableCell align="right">
-                      <input
-                        onChange={() => forAll(users)}
-                        type="checkbox"
-                        id="status"
-                        name="status"
-                      ></input>
+                     {forAll}
                     </TableCell>
                     <TableCell align="right">userId</TableCell>
                     <TableCell align="right">username</TableCell>
@@ -105,15 +138,7 @@ function AddCandidateToExam() {
                 <TableBody>
                   {users.map((user) => (
                     <TableRow key={user.userId}>
-                      <TableCell align="right">
-                        <input
-                          onChange={() => isChecked(user)}
-                          type="checkbox"
-                          id="status"
-                          name="status"
-                          checked={examUserList.includes(user.userId)}
-                        ></input>
-                      </TableCell>
+                      <TableCell align="right">{children(user)}</TableCell>
                       <TableCell align="right">{user.userId}</TableCell>
                       <TableCell align="right">{user.username}</TableCell>
                       <TableCell align="right">{user.nic}</TableCell>

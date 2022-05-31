@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import { AlignHorizontalCenter } from '@mui/icons-material';
 import { Divider } from '@material-ui/core';
 import { borderBottom } from '@mui/system';
+import DisplayMarks from '../DisplayMarks';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,15 +21,35 @@ const Marks = () => {
     const [data, setData] = React.useState([
       {
         coursename: "test1",
-        marks: 75,
+        exam: [ {
+            name :"cat 1",
+            mark: 75,
+            date : "2020/04/05"
+        },{
+            name :"cat 2",
+            mark: 85,
+            date : "2020/08/12"
+        },{
+            name :"final",
+            mark: 65,
+            date : "2020/12/30"
+        },]
       },
       {
         coursename: "test2",
-        marks: 65,
+        exam:[ {
+            name :"cat 2",
+            mark: 75,
+            date : "2020/04/05"
+        }],
       },
       {
         coursename: "test3",
-        marks: 55,
+        exam: [{
+            name :"cat 1",
+            mark: 75,
+            date : "2020/04/05"
+        }],
       },
     ]);
   return (
@@ -42,7 +63,7 @@ const Marks = () => {
           
           {data.map((data) => (
             <Item item sx={{ width: "50%" }}>
-              {data.coursename}
+              <DisplayMarks exam = {data.exam} course = {data.coursename}></DisplayMarks>
             </Item>
           ))}
         </Stack>
