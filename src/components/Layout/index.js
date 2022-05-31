@@ -16,8 +16,11 @@ import Avatar from "@mui/material/Avatar"
 import { makeStyles } from "@mui/styles"
 import NotificationDrawer from "../NotificationDrawer"
 import ROUTES from "../../routes/config"
-import { NavLink } from "react-router-dom"
-import { APP_NAME, APP_VERSION } from "../../utils/constants"
+import { NavLink, useNavigate } from "react-router-dom"
+import { APP_NAME, APP_VERSION, BASE_URL } from "../../utils/constants"
+import { DarkMode, LightMode } from "@mui/icons-material"
+import UserContext from "../../contexts/UserContext"
+import AXIOS_INSTANCE from "../../services/AxiosInstance"
 
 const drawerWidth = 240
 
@@ -54,7 +57,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-    backgroundColor: "#FFF",
+    backgroundColor: theme.palette.background.paper,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
@@ -95,115 +98,159 @@ const useStyles = makeStyles((theme) => {
             alignItems: "center",
             flexDirection: "column",
             height: 160,
-            backgroundColor: theme.palette.secondary.main,
+            backgroundColor: theme.palette.action.disabledBackground,
         },
         footer: {
-            marginTop: 'auto',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column'
-        }
+            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+        },
     }
 })
 
 function Layout(props) {
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(true);
+    const {user, setUser} = React.useContext(UserContext);
 
+    const navigate = useNavigate();
     const classes = useStyles()
+    
+    React.useEffect(() => {
+        if(!localStorage.getItem('JWT')){
+            navigate('/login')
+        }
+        if(!user){
+            // get logged user's details and store in context 
+            AXIOS_INSTANCE.get(BASE_URL + '/api/auth/getLoggedUser').then(response => {
+                if(response.data){
+                    setUser(response.data)
+                }
+            })
+        }
+    }, [])
 
     const handleDrawerOpen = () => {
         setOpen((prev) => !prev)
     }
 
+    const handleThemeChange = () => {
+        props.setTheme(prev => {
+            localStorage.setItem('THEME', (prev === 'light')? 'dark': 'light');
+            return (prev === 'light')? 'dark': 'light';
+        });
+    }
+
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                        }}
-                    >
-                        <MenuIcon color="primary" />
-                    </IconButton>
-                    <div style={{ marginLeft: "auto" }}>
-                        <NotificationDrawer />
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        color={"primary"}
-                    >
-                        ASO
-                    </Typography>
-                </DrawerHeader>
-                <div className={classes.userInfoContainer}>
-                    {open && (
-                        <>
-                            <Avatar
-                                alt="Profile Picture"
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2080&q=80"
-                                sx={{ width: 56, height: 56 }}
-                            />
-                            <Typography variant="body1" noWrap style={{fontWeight: 'bold'}}>
-                                Dilina Madhushan
-                            </Typography>
-                            <Typography variant="body2" noWrap>
-                                ADMIN
-                            </Typography>
-                        </>
-                    )}
-                </div>
-                <List>
-                    {ROUTES.map(
-                        (route, index) => (
-                            <ListItemButton
-                                key={'sidebarmenu' + route.id}
+            {!props.isLayoutHide && (
+                <>
+                    <AppBar position="fixed" open={open}>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
                                 sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? "initial" : "center",
-                                    px: 2.5,
+                                    marginRight: 5,
                                 }}
-                                component={NavLink}
-                                to={route.path}
                             >
-                                <ListItemIcon
+                                <MenuIcon color="primary" />
+                            </IconButton>
+                            <div style={{ marginLeft: "auto" }}>
+                                <IconButton onClick={handleThemeChange}>
+                                    {(props.theme === 'light')? (<LightMode />): (<DarkMode />)}
+                                </IconButton>
+                                <NotificationDrawer />
+                            </div>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer variant="permanent" open={open}>
+                        <DrawerHeader>
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="div"
+                                color={"primary"}
+                            >
+                                ASO
+                            </Typography>
+                        </DrawerHeader>
+                        <div className={classes.userInfoContainer}>
+                            {open && (
+                                <>
+                                    <Avatar
+                                        alt="Profile Picture"
+                                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2080&q=80"
+                                        sx={{ width: 56, height: 56 }}
+                                    />
+                                    <Typography
+                                        variant="body1"
+                                        noWrap
+                                        style={{ fontWeight: "bold" }}
+                                    >
+                                        Dilina Madhushan
+                                    </Typography>
+                                    <Typography variant="body2" noWrap>
+                                        ADMIN
+                                    </Typography>
+                                </>
+                            )}
+                        </div>
+                        <List>
+                            {ROUTES.map((route, index) => (
+                                <ListItemButton
+                                    key={"sidebarmenu" + route.id}
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : "auto",
-                                        justifyContent: "center",
+                                        minHeight: 48,
+                                        justifyContent: open
+                                            ? "initial"
+                                            : "center",
+                                        px: 2.5,
                                     }}
+                                    component={NavLink}
+                                    to={route.path}
                                 >
-                                    {route.icon}
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={route.label}
-                                    sx={{ opacity: open ? 1 : 0 }}
-                                />
-                            </ListItemButton>
-                        )
-                    )}
-                </List>
-                <footer className={classes.footer}>
-                    {open && (
-                        <>
-                            <Typography variant="body1" style={{fontSize: 12}}>{APP_NAME}</Typography>
-                            <Typography variant="body1" style={{fontSize: 10}}>{APP_VERSION}</Typography>
-                        </>
-                    )}
-                </footer>
-            </Drawer>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : "auto",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        {route.icon}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={route.label}
+                                        sx={{ opacity: open ? 1 : 0 }}
+                                    />
+                                </ListItemButton>
+                            ))}
+                        </List>
+                        <footer className={classes.footer}>
+                            {open && (
+                                <>
+                                    <Typography
+                                        variant="body1"
+                                        style={{ fontSize: 12 }}
+                                    >
+                                        {APP_NAME}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        style={{ fontSize: 10 }}
+                                    >
+                                        {APP_VERSION}
+                                    </Typography>
+                                </>
+                            )}
+                        </footer>
+                    </Drawer>
+                </>
+            )}
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 {props.children}

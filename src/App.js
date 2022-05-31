@@ -3,22 +3,39 @@ import getTheme from "./theme"
 import { Routes, Route, BrowserRouter } from "react-router-dom"
 import Layout from "./components/Layout"
 import ROUTES from "./routes/config"
+import Login from "./pages/Login"
+import { useEffect, useState } from "react"
+import { UserProvider } from "./contexts/UserContext"
 
 function App() {
+
+    const [theme, setTheme] = useState('light');
+
+    useEffect(() => {
+        const localTheme = localStorage.getItem("THEME");
+        if(localTheme === 'dark'){
+            setTheme('dark');
+        }
+    });
+
     return (
-        <ThemeProvider theme={getTheme("light")}>
+        <ThemeProvider theme={getTheme(theme)}>
             <BrowserRouter>
-                <Layout>
-                    <Routes>
+                <Routes>
+                    <Route path={'/login'} element={<Login />} />
                         {ROUTES.map((route, i) => (
                             <Route
                                 path={route.path}
-                                element={route.element}
+                                element={
+                                    <UserProvider>
+                                        <Layout theme={theme} setTheme={setTheme} isLayoutHide={route.hideLayout}>
+                                            {route.element}
+                                        </Layout>
+                                    </UserProvider>}
                                 key={"route" + route.id}
                             />
                         ))}
-                    </Routes>
-                </Layout>
+                </Routes>
             </BrowserRouter>
         </ThemeProvider>
     )
