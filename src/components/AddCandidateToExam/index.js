@@ -92,7 +92,7 @@ function AddCandidateToExam() {
         control={
           <Checkbox
             defaultUnChecked
-            checked={() => (checked || examUserList.includes(user.userId))}
+            checked={checked}
             onChange={() => isChecked(user)}
           />
         }
