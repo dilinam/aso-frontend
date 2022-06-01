@@ -11,11 +11,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import addDays from "date-fns/addDays";
-import { type } from "@testing-library/user-event/dist/type";
 import isWithinInterval from "date-fns/isWithinInterval";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
@@ -29,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Dashboard = () => {
   const [date, setDate] = React.useState(new Date());
-  const [open, setOpen] = React.useState(false);
+
   var moment = require("moment");
 
   let finalDate = addDays(date, 10); // add 10 days
