@@ -15,17 +15,19 @@ import Typography from "@mui/material/Typography";
 import addDays from "date-fns/addDays";
 import isWithinInterval from "date-fns/isWithinInterval";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import image from "./logo-img.jpg";
+import imageCourse from "./course.jpg";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   Cell,
+  Label,
 } from "recharts";
+import { Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -43,7 +45,23 @@ const Dashboard = () => {
   let finalDate = addDays(date, 10); // add 10 days
   let endDate = moment(finalDate).format("YYYY, MM, DD");
   let startDate = moment(date).format("YYYY, MM, DD");
-
+  const [courseList, setCourseList] = React.useState([
+    {
+      courseCode: "EEI4169",
+      finishedExam: 2,
+      exams: 3,
+    },
+    {
+      courseCode: "EEI4168",
+      finishedExam: 1,
+      exams: 3,
+    },
+    {
+      courseCode: "EEI4167",
+      finishedExam: 3,
+      exams: 3,
+    },
+  ]);
   const upComingEvents = [
     {
       date: "2022, 06, 04",
@@ -112,75 +130,122 @@ const Dashboard = () => {
 
   const data = [
     {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      name: "EEX4465",
+      marks: 75,
     },
     {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      name: "EEX4464",
+      marks: 55,
     },
     {
-      name: "Page C",
-      uv: 2000,
-      pv: 8,
-      amt: 2290,
+      name: "EEX4463",
+      marks: 65,
     },
     {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      name: "EEX4462",
+      marks: 48,
     },
     {
-      name: "Page E",
-      uv: 18,
-      pv: 4800,
-      amt: 2181,
+      name: "EEX4461",
+      marks: 35,
     },
     {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      name: "EEX4465",
+      marks: 95,
     },
     {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      name: "EEX4468",
+      marks: 85,
     },
     {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      name: "EEX4469",
+      marks: 75,
     },
     {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      name: "EEX4467",
+      marks: 45,
     },
     {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      name: "EEX4466",
+      marks: 75,
     },
   ];
 
   return (
     <>
+      <Box sx={{ width: "100%", borderRadius: 3, height: "7%" }}>
+        <img src={image} height="100%" width="100%" />
+      </Box>
+      <br></br>
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ width: "70%", borderRadius: 3 }}></Box>
         <Divider orientation="vertical" flexItem />
+        <Box sx={{ width: "70%", borderRadius: 3 }}>
+          <Typography gutterBottom variant="h6">
+            Recently Acess Courses
+          </Typography>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            {courseList.map((course) => (
+              <Grid item xs={6}>
+                <Item>
+                  <Card sx={{ width: "345" }}>
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height="80"
+                      image={imageCourse}
+                    />
+                    <CardContent>
+                      <Stack spacing={15} direction="row">
+                        <Typography gutterBottom variant="h6" component="div">
+                          {course.courseCode}
+                        </Typography>
+                        <Box
+                          sx={{ position: "relative", display: "inline-flex" }}
+                        >
+                          <CircularProgress
+                            variant="determinate"
+                            marginLeft="10"
+                            value={(course.finishedExam / course.exams) * 100}
+                          />
+                          <Box
+                            sx={{
+                              top: 0,
+                              left: 0,
+                              bottom: 0,
+                              right: 0,
+                              position: "absolute",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Typography
+                              variant="caption"
+                              component="div"
+                              color="text.secondary"
+                            >
+                              {`${
+                                Math.round((course.finishedExam / course.exams) *
+                                100)
+                              }%`}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Item>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
         <Box
           sx={{
-            width: "28%",
+            width: "30%",
             // bgcolor: "#616161",
             margin: "auto",
             borderRadius: 3,
@@ -202,20 +267,27 @@ const Dashboard = () => {
         <Box
           sx={{
             width: "70%",
-
-            // bgcolor: "#616161",
           }}
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart width={600} height={300} data={data}>
-              <XAxis dataKey="name" />
+          <Typography gutterBottom variant="h6">
+            last exams analiys
+          </Typography>
+          <ResponsiveContainer width="100%" height="90%">
+            <BarChart data={data}>
+              <XAxis dataKey="name" angle={-45} textAnchor="end">
+                <Label value="Subjects" position="bottom" offset={45} />
+              </XAxis>
               <YAxis />
               <Tooltip />
-
-              <Bar dataKey="uv" fill="#82ca9d" minPointSize={10} />
-              {/* {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % 20]} /> //
-              ))} */}
+              <Bar dataKey="marks">
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.marks > 50 ? "green" : "red"}
+                    label={entry.name}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Box>
